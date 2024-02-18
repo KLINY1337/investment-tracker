@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  auth-microservice:
+    build: ./auth-microservice/
+    container_name: auth-microservice
+    ports:
+      - "8079:8079"
+    networks:
+      - fintracker-network
+    environment:
+      - TZ=Europe/Moscow
+    restart: unless-stopped
+
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: fintracker_sipi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: d8NKJdo8Lo7vntuYoPn7
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth=scram-sha-256
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    networks:
+      - fintracker-network
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  fintracker-network:
+
+volumes:
+  postgres_data:
