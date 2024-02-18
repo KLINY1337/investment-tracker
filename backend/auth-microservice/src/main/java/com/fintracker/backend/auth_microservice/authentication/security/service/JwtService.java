@@ -1,4 +1,4 @@
-package com.fintracker.backend.auth_microservice.service;
+package com.fintracker.backend.auth_microservice.authentication.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

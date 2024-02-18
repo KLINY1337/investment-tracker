@@ -1,6 +1,6 @@
-package com.fintracker.backend.auth_microservice.configuration;
+package com.fintracker.backend.auth_microservice.authentication.security.configuration;
 
-import com.fintracker.backend.auth_microservice.repository.UserRepository;
+import com.fintracker.backend.auth_microservice.authentication.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

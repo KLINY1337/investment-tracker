@@ -1,6 +1,6 @@
-package com.fintracker.backend.auth_microservice.filter;
+package com.fintracker.backend.auth_microservice.authentication.security.filter;
 
-import com.fintracker.backend.auth_microservice.service.JwtService;
+import com.fintracker.backend.auth_microservice.authentication.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

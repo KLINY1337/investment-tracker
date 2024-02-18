@@ -1,6 +1,6 @@
-package com.fintracker.backend.auth_microservice.configuration;
+package com.fintracker.backend.auth_microservice.authentication.security.configuration;
 
-import com.fintracker.backend.auth_microservice.filter.JwtAuthenticationFilter;
+import com.fintracker.backend.auth_microservice.authentication.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     private int port;
 
     @Value("${server.protocol}")
-    private int protocol;
+    private String protocol;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
