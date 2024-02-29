@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,6 +20,7 @@ import java.io.StringReader;
 @Slf4j
 public class CBRService {
 
+    @Cacheable("dailyRatesCBR")
     public ValKursCBR getDailyCurrencyRate() throws CBRRatesException {
         String url = "http://www.cbr.ru/scripts/XML_daily.asp";
         try {
@@ -43,5 +47,13 @@ public class CBRService {
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
         }
+
+    }
+
+
+    @CacheEvict(value = "dailyRatesCBR", allEntries = true)
+    @Scheduled(cron = "0,30 * * * *")
+    public void emptyHotelsCache() {
+        log.info("Emptying CBR daily rates Cache");
     }
 }
