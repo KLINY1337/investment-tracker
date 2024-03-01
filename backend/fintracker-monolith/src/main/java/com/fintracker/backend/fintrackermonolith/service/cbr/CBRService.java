@@ -52,7 +52,7 @@ public class CBRService {
 
 
     @CacheEvict(value = "dailyRatesCBR", allEntries = true)
-    @Scheduled(cron = "0,30 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void emptyHotelsCache() {
         log.info("Emptying CBR daily rates Cache");
     }
