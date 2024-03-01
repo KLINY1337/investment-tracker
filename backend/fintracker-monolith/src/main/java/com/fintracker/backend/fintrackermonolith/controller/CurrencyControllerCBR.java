@@ -6,10 +6,8 @@ import com.fintracker.backend.fintrackermonolith.service.cbr.CBRService;
 import com.fintracker.backend.fintrackermonolith.service.cbr.dao.ValKursCBR;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
