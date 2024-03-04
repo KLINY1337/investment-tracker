@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DatabaseMigrationSettings" lastSelectedDirectory="backend\auth-microservice\src\main\resources\db\migration" />
+  <component name="JpaPluginProjectSettings">
+    <option name="lastSelectedLanguage" value="Java" />
+  </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>
+      <persistence-unit moduleName="fintracker-monolith" name="Default">
+        <packages>
+          <package value="com.fintracker.backend.fintrackermonolith" />
+        </packages>
+      </persistence-unit>
       <persistence-unit moduleName="auth-microservice" name="Default">
         <packages>
-          <package value="com.fintracker.backend.auth_microservice" />
+          <package value="com.fintracker.backend.fintrackermonolith" />
         </packages>
       </persistence-unit>
     </persistence-units>
