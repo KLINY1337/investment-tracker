@@ -5,5 +5,7 @@
     <option name="renamerInitialized" value="true" />
     <option name="isSnapshotDb" value="false" />
     <option name="snapshotModelValue" value="Default" />
+    <option name="newEntityIdType" value="Long" />
+    <option name="newEntityIdStrategy" value="Identity" />
   </component>
 </project>
