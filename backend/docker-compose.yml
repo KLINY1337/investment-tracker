@@ -2,8 +2,8 @@ version: '3'
 
 services:
   auth-microservice:
-    build: ./auth-microservice/
-    container_name: auth-microservice
+    build: ./auth_server-microservice/
+    container_name: auth_server-microservice
     ports:
       - "8079:8079"
     networks:
@@ -20,7 +20,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: d8NKJdo8Lo7vntuYoPn7
       POSTGRES_HOST_AUTH_METHOD: scram-sha-256
-      POSTGRES_INITDB_ARGS: --auth=scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth_server=scram-sha-256
     expose:
       - "5432"
     ports:
