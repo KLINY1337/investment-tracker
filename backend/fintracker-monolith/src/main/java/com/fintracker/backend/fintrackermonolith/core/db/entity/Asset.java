@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Setter
 @Table(name = "assets")
 @Builder
 @AllArgsConstructor
@@ -16,5 +17,5 @@ public class Asset {
 
     private String symbol;
 
-    private String asset_type_name;
+    private String assetTypeName;
 }

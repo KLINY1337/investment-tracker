@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping
-    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestParam("id") Long id, UpdateUserByIdRequest request) {
+    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestParam Long id, @RequestBody UpdateUserByIdRequest request) {
         UpdateUserByIdResponse response = userService.updateUserById(id, request.username(), request.email(), request.password());
 
         if (response.isSuccess()) {
