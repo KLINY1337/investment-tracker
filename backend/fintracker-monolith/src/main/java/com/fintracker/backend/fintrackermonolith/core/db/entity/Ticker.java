@@ -3,13 +3,11 @@ package com.fintracker.backend.fintrackermonolith.core.db.entity;
 import com.fintracker.backend.fintrackermonolith.core.db.enumeration.DenominationType;
 import com.fintracker.backend.fintrackermonolith.core.db.enumeration.ExpirationType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

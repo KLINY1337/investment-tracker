@@ -29,16 +29,12 @@ public class InvestmentPosition {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @ManyToOne
-    @JoinColumn(name = "market_type_id")
-    private MarketType marketType;
-
     private Date openDate;
     private Date closeDate;
 
-    private BigDecimal openPriceUSD;
-    private BigDecimal openPriceRUR;
+    private BigDecimal openQuoteAssetPrice;
 
-    private BigDecimal closePriceUSD;
-    private BigDecimal closePriceRUR;
+    private BigDecimal closeQuoteAssetPrice;
+
+    private BigDecimal baseAssetAmount;
 }
