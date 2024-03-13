@@ -1,10 +1,10 @@
-package com.fintracker.backend.fintrackermonolith.other.service.support;
+package com.fintracker.backend.fintrackermonolith.support.service.support;
 
-import com.fintracker.backend.fintrackermonolith.other.controller.request.SupportRequest;
-import com.fintracker.backend.fintrackermonolith.other.entity.SupportRequestEntity;
-import com.fintracker.backend.fintrackermonolith.other.enumeration.SupportRequestStatus;
-import com.fintracker.backend.fintrackermonolith.other.exception.support.SupportRequestNotFoundException;
-import com.fintracker.backend.fintrackermonolith.other.repository.SupportRequestRepository;
+import com.fintracker.backend.fintrackermonolith.support.controller.request.SupportRequest;
+import com.fintracker.backend.fintrackermonolith.support.entity.SupportRequestEntity;
+import com.fintracker.backend.fintrackermonolith.support.enumeration.SupportRequestStatus;
+import com.fintracker.backend.fintrackermonolith.support.exception.support.SupportRequestNotFoundException;
+import com.fintracker.backend.fintrackermonolith.support.repository.SupportRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

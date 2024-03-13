@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.other.controller.request;
+package com.fintracker.backend.fintrackermonolith.support.controller.request;
 
 import lombok.Getter;
 import lombok.Setter;
