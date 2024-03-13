@@ -11,6 +11,7 @@ import com.fintracker.backend.fintrackermonolith.core.module.investment_position
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.UpdateInvestmentPositionByIdResponse;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvalidTimePeriodException;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvestmentPositionIdsNotFoundException;
+import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,6 @@ public class InvestmentPositionService {
     private final InvestmentPositionRepository investmentPositionRepository;
     private final TickerService tickerService;
     private final PortfolioService portfolioService;
-    private final MarketTypeService marketTypeService;
 
     public CreateInvestmentPositionResponse createInvestmentPosition(
             Long tickerId,
@@ -38,7 +38,7 @@ public class InvestmentPositionService {
             BigDecimal closeQuoteAssetPrice,
             BigDecimal baseAssetAmount) {
         Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).get(0);
-        Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).get(0);
+        Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
         if (closeDate.before(openDate)) {
             throw new InvalidTimePeriodException("Open date must be before close date");
         }
@@ -83,7 +83,10 @@ public class InvestmentPositionService {
             BigDecimal closeQuoteAssetPrice,
             BigDecimal baseAssetAmount) {
         Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).get(0);
-        Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).get(0);
+        Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
+        if (closeDate.before(openDate)) {
+            throw new InvalidTimePeriodException("Open date must be before close date");
+        }
         InvestmentPosition investmentPosition = investmentPositionRepository
                 .findById(id)
                 .orElseThrow(() -> new InvestmentPositionIdsNotFoundException("Specified investment position does not exist in database", List.of(id)));

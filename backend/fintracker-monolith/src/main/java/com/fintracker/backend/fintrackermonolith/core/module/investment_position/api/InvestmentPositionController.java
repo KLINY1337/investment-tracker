@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/v1/investment_position")
+@RestController("/api/v1/investment_positions")
 @RequiredArgsConstructor
 public class InvestmentPositionController {
 

@@ -2,6 +2,7 @@ package com.fintracker.backend.fintrackermonolith.core.db.entity;
 
 import com.fintracker.backend.fintrackermonolith.core.db.enumeration.DenominationType;
 import com.fintracker.backend.fintrackermonolith.core.db.enumeration.ExpirationType;
+import com.fintracker.backend.fintrackermonolith.core.db.enumeration.MarketType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,9 +37,8 @@ public class Ticker {
     @Enumerated(value = EnumType.STRING)
     private ExpirationType expirationType;
 
-    private Boolean inUse = false;
-
-    @ManyToOne
-    @JoinColumn(name = "market_type_id")
+    @Enumerated(value = EnumType.STRING)
     private MarketType marketType;
+
+    private Boolean inUse = true;
 }

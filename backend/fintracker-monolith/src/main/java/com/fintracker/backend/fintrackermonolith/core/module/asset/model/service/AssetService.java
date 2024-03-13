@@ -54,6 +54,9 @@ public class AssetService {
     }
 
     public UpdateAssetByIdResponse updateAssetById(Long id, String symbol, String assetTypeName) {
+        if (assetRepository.existsBySymbolAndAssetTypeName(symbol, assetTypeName)) {
+            throw new AssetAlreadyExistsException("Specified asset already exists");
+        }
         Asset asset = assetRepository
                 .findById(id)
                 .orElseThrow(() -> new AssetIdsNotFoundException("Specified asset does not exist in database", List.of(id)));
