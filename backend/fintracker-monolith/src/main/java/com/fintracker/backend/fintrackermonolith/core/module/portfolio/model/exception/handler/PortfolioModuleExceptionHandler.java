@@ -1,7 +1,5 @@
 package com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.handler;
 
-import com.fintracker.backend.fintrackermonolith.core.module.asset.model.exception.AssetAlreadyExistsException;
-import com.fintracker.backend.fintrackermonolith.core.module.asset.model.exception.AssetIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.PortfolioAlreadyExistsException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.PortfolioIdsNotFoundException;
 import org.springframework.http.HttpStatusCode;
@@ -18,9 +16,9 @@ public class PortfolioModuleExceptionHandler {
     }
 
     @ExceptionHandler(PortfolioIdsNotFoundException.class)
-    public ProblemDetail handleAssetIdsNotFoundException(PortfolioAlreadyExistsException e) {
+    public ProblemDetail handleAssetIdsNotFoundException(PortfolioIdsNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(422), e.getMessage());
-        problemDetail.setProperty("irretrievableIds", e.ge);
+        problemDetail.setProperty("irretrievableIds", e.getUnprocessableIds());
         return problemDetail;
     }
 }
