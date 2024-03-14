@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/v1/user")
+@RestController
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping
-    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestParam("id") Long id, UpdateUserByIdRequest request) {
+    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestParam Long id, @RequestBody UpdateUserByIdRequest request) {
         UpdateUserByIdResponse response = userService.updateUserById(id, request.username(), request.email(), request.password());
 
         if (response.isSuccess()) {

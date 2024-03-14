@@ -10,7 +10,6 @@ import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.e
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.exception.UserIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.auth_server.util.PasswordUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
