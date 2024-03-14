@@ -12,7 +12,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tickers")
+@Table(name = "tickers",
+uniqueConstraints = @UniqueConstraint(
+        columnNames = {"exchange_ticker_symbol", "exchange_name"})
+)
 public class Ticker {
 
     @Id

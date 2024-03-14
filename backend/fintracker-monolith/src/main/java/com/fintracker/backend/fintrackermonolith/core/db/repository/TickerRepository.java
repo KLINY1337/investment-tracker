@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TickerRepository extends JpaRepository<Ticker, Long> {
+    boolean existsByExchangeTickerSymbolAndExchangeName(String exchangeTickerSymbol, String exchangeName);
     @Query("""
             select (count(t) > 0) from Ticker t
             where t.exchangeTickerSymbol = ?1 and t.exchangeName = ?2 and t.denominationType = ?3 and t.expirationType = ?4 and t.marketType = ?5""")

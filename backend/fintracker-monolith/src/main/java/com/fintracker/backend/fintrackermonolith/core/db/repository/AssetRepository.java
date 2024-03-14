@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, Long> {
+    boolean existsBySymbol(String symbol);
     @Query("select (count(a) > 0) from Asset a where a.symbol = ?1 and a.assetTypeName = ?2")
     boolean existsBySymbolAndAssetTypeName(String symbol, String asset_type_name);
+
+    Asset findBySymbol(String symbol);
+
 }
