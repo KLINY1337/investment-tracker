@@ -12,6 +12,7 @@ import com.fintracker.backend.fintrackermonolith.core.module.investment_position
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvalidTimePeriodException;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvestmentPositionIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
+import com.fintracker.backend.fintrackermonolith.core.module.ticker.model.service.TickerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class InvestmentPositionService {
             BigDecimal openQuoteAssetPrice,
             BigDecimal closeQuoteAssetPrice,
             BigDecimal baseAssetAmount) {
-        Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).get(0);
+        Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).tickers().get(0);
         Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
         if (closeDate.before(openDate)) {
             throw new InvalidTimePeriodException("Open date must be before close date");
@@ -82,7 +83,7 @@ public class InvestmentPositionService {
             BigDecimal openQuoteAssetPrice,
             BigDecimal closeQuoteAssetPrice,
             BigDecimal baseAssetAmount) {
-        Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).get(0);
+        Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).tickers().get(0);
         Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
         if (closeDate.before(openDate)) {
             throw new InvalidTimePeriodException("Open date must be before close date");

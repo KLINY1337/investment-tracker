@@ -39,7 +39,7 @@ public class PortfolioService {
         return new CreatePortfolioResponse(
                 true,
                 "Portfolio successfully created",
-                portfolio
+                portfolioRepository.save(portfolio)
         );
     }
 
@@ -53,7 +53,7 @@ public class PortfolioService {
 
         return new GetPortfoliosByIdsResponse(
                 true,
-                "Specified assets retrieved from database",
+                "Specified portfolios retrieved from database",
                 portfolioRepository.findAllById(processableAndUnprocessableIds.get(true))
         );
     }
@@ -73,7 +73,7 @@ public class PortfolioService {
 
         return new UpdatePortfolioByIdResponse(
                 true,
-                "Asset successfully updated",
+                "Portfolio successfully updated",
                 portfolio
         );
     }
