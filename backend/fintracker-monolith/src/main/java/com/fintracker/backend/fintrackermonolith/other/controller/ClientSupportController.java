@@ -31,7 +31,7 @@ public class ClientSupportController {
         }catch(Exception e){
             return ResponseEntity.badRequest().body(MainResponse.error(e.getMessage()));
         }finally{
-            response  = ResponseEntity.ok(MainResponse.<SupportRequest>builder().data(supportRequest).success(true).message("200").build());
+            response  = ResponseEntity.ok(MainResponse.<SupportRequest>builder().data(supportRequest).isSuccess(true).message("200").build());
         }
         return response;
 

@@ -8,20 +8,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MainResponse<T> {
-    private boolean success;
+    private boolean isSuccess;
     private String message;
     private T data;
 
     public static <T> MainResponse<T> success (T data) {
         return MainResponse.<T>builder()
-                .success(true)
+                .isSuccess(true)
                 .data(data)
                 .build();
     }
 
     public static <T> MainResponse<T> error (String message) {
         return MainResponse.<T>builder()
-                .success(false)
+                .isSuccess(false)
                 .message(message)
                 .build();
     }

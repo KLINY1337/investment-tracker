@@ -3,7 +3,7 @@ package com.fintracker.backend.fintrackermonolith.exchange_rate.exception.cbr;
 import lombok.Builder;
 
 @Builder
-public class CBRRatesException extends Exception{
+public class CBRRatesException extends RuntimeException{
 
     private String message;
 
