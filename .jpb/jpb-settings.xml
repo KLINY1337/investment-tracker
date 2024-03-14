@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DatabaseMigrationSettings" lastSelectedDirectory="backend\auth-microservice\src\main\resources\db\migration" />
+  <component name="DatabaseMigrationSettings" lastSelectedDirectory="backend/fintracker-monolith/src/main/resources/db/migration" />
   <component name="JpaPluginProjectSettings">
     <option name="lastSelectedLanguage" value="Java" />
   </component>

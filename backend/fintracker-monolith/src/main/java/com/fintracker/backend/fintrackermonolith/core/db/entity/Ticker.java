@@ -40,5 +40,5 @@ public class Ticker {
     @Enumerated(value = EnumType.STRING)
     private MarketType marketType;
 
-    private Boolean inUse = true;
+    private Boolean inUse;
 }
