@@ -1,7 +1,7 @@
 package com.fintracker.backend.fintrackermonolith.other.controller;
 
 
-import com.fintracker.backend.fintrackermonolith.exchange_rate.controller.response.MainResponse;
+import com.fintracker.backend.fintrackermonolith.other.controller.response.MainResponse;
 import com.fintracker.backend.fintrackermonolith.other.entity.SupportRequestEntity;
 import com.fintracker.backend.fintrackermonolith.other.service.support.SupportService;
 import lombok.RequiredArgsConstructor;
