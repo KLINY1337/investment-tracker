@@ -2,10 +2,7 @@ package com.fintracker.backend.fintrackermonolith.core.module.investment_positio
 
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.request.CreateInvestmentPositionRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.request.UpdateInvestmentPositionByIdRequest;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.CreateInvestmentPositionResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.DeleteInvestmentPositionsByIdsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.GetInvestmentPositionsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.UpdateInvestmentPositionByIdResponse;
+import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service.InvestmentPositionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +31,7 @@ public class InvestmentPositionController {
         ));
     }
 
-    @GetMapping
+    @GetMapping("/byIds")
     public ResponseEntity<GetInvestmentPositionsResponse> getInvestmentPositionsByIds(@RequestParam List<Long> idList) {
         return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByIds(idList));
     }
@@ -56,5 +53,15 @@ public class InvestmentPositionController {
     @DeleteMapping
     public ResponseEntity<DeleteInvestmentPositionsByIdsResponse> deleteInvestmentPositionsByIds(@RequestParam List<Long> idList) {
         return ResponseEntity.ok(investmentPositionService.deleteInvestmentPositionsByIds(idList));
+    }
+
+    @GetMapping("/byPortfoliosIds")
+    public ResponseEntity<GetInvestmentPositionsByPortfoliosIdsResponse> getInvestmentPositionsByPortfolios(@RequestParam List<Long> idList) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByPortfoliosIds(idList));
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<GetInvestmentPositionPriceByIdResponse> getInvestmentPositionPriceById(@RequestParam Long investmentPositionId, @RequestParam Long quoteAssetId) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionPriceById(investmentPositionId, quoteAssetId));
     }
 }
