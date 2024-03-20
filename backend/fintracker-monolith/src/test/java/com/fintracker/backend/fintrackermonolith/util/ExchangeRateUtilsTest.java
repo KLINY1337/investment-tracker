@@ -1,6 +1,6 @@
 package com.fintracker.backend.fintrackermonolith.util;
 
-import com.fintracker.backend.fintrackermonolith.exchange_rate.util.CurrencyConverter;
+import com.fintracker.backend.fintrackermonolith.exchange_rate.util.ExchangeRateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CurrencyConverterTest {
+class ExchangeRateUtilsTest {
 
     private static final Date FIXED_DATE;
 
@@ -27,7 +27,7 @@ class CurrencyConverterTest {
         BigDecimal amount = new BigDecimal("10");
         BigDecimal expectedResult = new BigDecimal("908.0667430");
 
-        BigDecimal result = CurrencyConverter.convert("USD", "rub", amount, FIXED_DATE);
+        BigDecimal result = ExchangeRateUtils.convertCurrencies("USD", "rub", amount, FIXED_DATE);
         assertEquals(expectedResult, result);
     }
 
@@ -35,23 +35,26 @@ class CurrencyConverterTest {
     void testExchangeRate() {
         BigDecimal expectedRate = new BigDecimal("90.8066743");
 
-        BigDecimal result = CurrencyConverter.exchangeRate("USD", "rub", FIXED_DATE);
+        BigDecimal result = ExchangeRateUtils.currenciesExchangeRate("USD", "rub", FIXED_DATE);
         assertEquals(expectedRate, result);
     }
 
     @Test
     void wrongFromAssetExchangeRate() {
-        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("iamnotanasset", "rub", FIXED_DATE);});
+        assertThrows(RuntimeException.class, () -> {
+            ExchangeRateUtils.currenciesExchangeRate("iamnotanasset", "rub", FIXED_DATE);});
     }
 
     @Test
     void wrongToAssetExchangeRate() {
-        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("usd", "iamnotanasset", FIXED_DATE);});
+        assertThrows(RuntimeException.class, () -> {
+            ExchangeRateUtils.currenciesExchangeRate("usd", "iamnotanasset", FIXED_DATE);});
     }
 
     @Test
     void wrongDateExchangeRate() {
-        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("usd", "rub", new Date(1000));});
+        assertThrows(RuntimeException.class, () -> {
+            ExchangeRateUtils.currenciesExchangeRate("usd", "rub", new Date(1000));});
     }
 
 

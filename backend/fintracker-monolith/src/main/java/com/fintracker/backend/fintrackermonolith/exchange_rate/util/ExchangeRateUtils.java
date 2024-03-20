@@ -15,20 +15,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @UtilityClass
-public class CurrencyConverter {
+public class ExchangeRateUtils {
     private final String BASE = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@";
     private final String FALLBACK = ".currency-api.pages.dev/";
 
 
-    public static BigDecimal convert (String from, String to, BigDecimal amount,Date date){
+    public BigDecimal convertCurrencies(String from, String to, BigDecimal amount, Date date){
         try {
             // Try to get the exchange rate from the primary API
-            BigDecimal exchangeRate = exchangeRate(from, to, date, false);
+            BigDecimal exchangeRate = currenciesExchangeRate(from, to, date, false);
             return amount.multiply(exchangeRate);
         } catch (RuntimeException e) {
             // If the primary API fails, try the fallback API
             try {
-                BigDecimal exchangeRate = exchangeRate(from, to, date, true);
+                BigDecimal exchangeRate = currenciesExchangeRate(from, to, date, true);
                 return amount.multiply(exchangeRate);
             } catch (RuntimeException ex) {
                 // If both APIs fail, throw an exception
@@ -37,14 +37,14 @@ public class CurrencyConverter {
         }
     }
 
-    public static BigDecimal exchangeRate(String from, String to, Date date) {
+    public BigDecimal currenciesExchangeRate(String from, String to, Date date) {
         try {
             // Try to get the exchange rate from the primary API
-            return exchangeRate(from, to, date, false);
+            return currenciesExchangeRate(from, to, date, false);
         } catch (RuntimeException e) {
             // If the primary API fails, try the fallback API
             try {
-                return exchangeRate(from, to, date, true);
+                return currenciesExchangeRate(from, to, date, true);
             } catch (RuntimeException ex) {
                 // If both APIs fail, throw an exception
                 throw new RuntimeException("Failed to get exchange rate from " + from + " to " + to, ex);
@@ -52,25 +52,8 @@ public class CurrencyConverter {
         }
     }
 
-    // response body length is -1 using especially OkHttp
-    @Deprecated
-    private BigDecimal exchangeRateOKhttp(String from, String to, Date date, boolean fallback) throws RuntimeException{
-        String url = buildUrl(from, date, fallback);
-        Request request = new Request.Builder().url(url).build();
-        Call call = new OkHttpClient().newCall(request);
-        try {
-            Response response = call.execute();
-            if (response.isSuccessful() && response.body()!= null) {
-                return parseExchangeRateResponse(from, to, response.body().string());
-            }else{
-                throw new RuntimeException();
-            }
 
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-    private BigDecimal exchangeRate(String from, String to, Date date, boolean fallback) throws RuntimeException {
+    private BigDecimal currenciesExchangeRate(String from, String to, Date date, boolean fallback) throws RuntimeException {
         String url = buildUrl(from, date, fallback);
         HttpURLConnection connection = null;
 
@@ -102,28 +85,28 @@ public class CurrencyConverter {
         }
     }
 
-    private static BigDecimal parseExchangeRateResponse(String from, String to, String response) {
+    private BigDecimal parseExchangeRateResponse(String from, String to, String response) {
         JsonObject json = new Gson().fromJson(response, JsonObject.class);
         JsonObject fromObject = json.get(from.toLowerCase()).getAsJsonObject();
         return new BigDecimal(fromObject.get(to.toLowerCase()).getAsString());
     }
 
-    private static String buildUrl (String from, Date date, boolean fallback) {
+    private String buildUrl (String from, Date date, boolean fallback) {
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        StringBuilder b = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         if(!fallback){
-            b.append(BASE);
-            b.append(formattedDate);
-            b.append("/v1");
+            stringBuilder.append(BASE);
+            stringBuilder.append(formattedDate);
+            stringBuilder.append("/v1");
         }
         else{
-            b.append("https://");
-            b.append(formattedDate);
-            b.append(FALLBACK);
+            stringBuilder.append("https://");
+            stringBuilder.append(formattedDate);
+            stringBuilder.append(FALLBACK);
         }
-        b.append("/currencies/").append(from.toLowerCase()).append(".json");
+        stringBuilder.append("/currencies/").append(from.toLowerCase()).append(".json");
 
-        return b.toString();
+        return stringBuilder.toString();
     }
 }
 
