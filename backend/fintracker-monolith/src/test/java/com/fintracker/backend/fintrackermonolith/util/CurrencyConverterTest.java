@@ -39,6 +39,23 @@ class CurrencyConverterTest {
         assertEquals(expectedRate, result);
     }
 
+    @Test
+    void wrongFromAssetExchangeRate() {
+        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("iamnotanasset", "rub", FIXED_DATE);});
+    }
+
+    @Test
+    void wrongToAssetExchangeRate() {
+        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("usd", "iamnotanasset", FIXED_DATE);});
+    }
+
+    @Test
+    void wrongDateExchangeRate() {
+        assertThrows(RuntimeException.class, () -> {CurrencyConverter.exchangeRate("usd", "rub", new Date(1000));});
+    }
+
+
+
 //    @Test
 //    void testConvertWithFailedAPIs() {
 
