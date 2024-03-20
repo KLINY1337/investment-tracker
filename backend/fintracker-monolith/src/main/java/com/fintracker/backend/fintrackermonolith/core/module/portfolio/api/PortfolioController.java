@@ -24,7 +24,7 @@ public class PortfolioController {
         ));
     }
 
-    @GetMapping
+    @GetMapping("/byIds")
     public ResponseEntity<GetPortfoliosByIdsResponse> getPortfoliosByIds(@RequestParam List<Long> idList) {
         return ResponseEntity.ok(portfolioService.getPortfoliosByIds(idList));
     }
@@ -43,4 +43,13 @@ public class PortfolioController {
         return ResponseEntity.ok(portfolioService.deletePortfoliosByIds(idList));
     }
 
+    @GetMapping("/byUserId")
+    public ResponseEntity<GetTotalPortfoliosPriceByUserId> getTotalPortfoliosPriceByUserId(@RequestParam Long userId, @RequestParam Long quoteAssetId) {
+        return ResponseEntity.ok(portfolioService.getTotalPortfoliosPriceByUserId(userId, quoteAssetId));
+    }
+
+    @GetMapping("/count/byUserId")
+    public ResponseEntity<GetPortfoliosCountByUserIdResponse> getPortfoliosCountByUserId(@RequestParam Long userId) {
+        return ResponseEntity.ok(portfolioService.getPortfoliosCountByUserId(userId));
+    }
 }

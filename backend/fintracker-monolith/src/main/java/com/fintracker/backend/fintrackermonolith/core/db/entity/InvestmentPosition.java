@@ -1,16 +1,14 @@
 package com.fintracker.backend.fintrackermonolith.core.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

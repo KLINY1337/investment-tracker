@@ -1,21 +1,22 @@
 package com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service;
 
+import com.fintracker.backend.fintrackermonolith.core.db.entity.Asset;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Ticker;
 import com.fintracker.backend.fintrackermonolith.core.db.repository.InvestmentPositionRepository;
 import com.fintracker.backend.fintrackermonolith.core.module.asset.model.exception.AssetIdsNotFoundException;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.CreateInvestmentPositionResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.DeleteInvestmentPositionsByIdsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.GetInvestmentPositionsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.UpdateInvestmentPositionByIdResponse;
+import com.fintracker.backend.fintrackermonolith.core.module.asset.model.service.AssetService;
+import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvalidTimePeriodException;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvestmentPositionIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.model.service.TickerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class InvestmentPositionService {
     private final InvestmentPositionRepository investmentPositionRepository;
     private final TickerService tickerService;
     private final PortfolioService portfolioService;
+    private final AssetService assetService;
 
     public CreateInvestmentPositionResponse createInvestmentPosition(
             Long tickerId,
@@ -121,5 +123,20 @@ public class InvestmentPositionService {
                 "Specified assets deleted from database",
                 processableAndUnprocessableIds.get(true).size()
         );
+    }
+
+    public GetInvestmentPositionsByPortfoliosIdsResponse getInvestmentPositionsByPortfoliosIds(List<Long> ids) {
+        List<Portfolio> portfolios = portfolioService.getPortfoliosByIds(ids).portfolios();
+        return new GetInvestmentPositionsByPortfoliosIdsResponse(
+                true,
+                "Investment positions successfully retrieved from database",
+                investmentPositionRepository.findAllByPortfolios(portfolios)
+        );
+    }
+
+    public GetInvestmentPositionPriceByIdResponse getInvestmentPositionPriceById(Long investmentPositionId, Long quoteAssetId) {
+        InvestmentPosition investmentPosition = getInvestmentPositionsByIds(List.of(investmentPositionId)).investmentPositions().get(0);
+        Asset quoteAsset = assetService.getAssetsByIds(List.of(quoteAssetId)).assets().get(0);
+        return null;
     }
 }

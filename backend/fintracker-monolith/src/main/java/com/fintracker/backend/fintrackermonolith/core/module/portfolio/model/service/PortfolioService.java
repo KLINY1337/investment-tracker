@@ -2,19 +2,24 @@ package com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.se
 
 import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
+import com.fintracker.backend.fintrackermonolith.core.db.entity.Asset;
+import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
 import com.fintracker.backend.fintrackermonolith.core.db.repository.PortfolioRepository;
-import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.CreatePortfolioResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.DeletePortfoliosByIdsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.GetPortfoliosByIdsResponse;
-import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.UpdatePortfolioByIdResponse;
+import com.fintracker.backend.fintrackermonolith.core.module.asset.model.service.AssetService;
+import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service.InvestmentPositionService;
+import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.PortfolioAlreadyExistsException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.PortfolioIdsNotFoundException;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +28,9 @@ public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
 
-    UserService userService;
+    private final UserService userService;
+    private final InvestmentPositionService investmentPositionService;
+    private final AssetService assetService;
 
     public CreatePortfolioResponse createPortfolio(Long userId, String name) {
         User user = userService.getUsersByIds(List.of(userId)).users().get(0);
@@ -58,7 +65,6 @@ public class PortfolioService {
         );
     }
 
-
     public UpdatePortfolioByIdResponse updatePortfolioById(Long id, Long userId, String name) {
         User user = userService.getUsersByIds(List.of(userId)).users().get(0);
         if (portfolioRepository.existsByUserAndName(user, name)) {
@@ -91,6 +97,43 @@ public class PortfolioService {
                 true,
                 "Specified portfolios deleted from database",
                 processableAndUnprocessableIds.get(true).size()
+        );
+    }
+
+    public GetTotalPortfoliosPriceByUserId getTotalPortfoliosPriceByUserId(Long userId, Long quoteAssetId) {
+        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
+        Asset asset = assetService.getAssetsByIds(List.of(quoteAssetId)).assets().get(0);
+        List<Long> portfoliosIds = portfolioRepository.findAllIdsByUser(user);
+        List<InvestmentPosition> investmentPositions = investmentPositionService
+                .getInvestmentPositionsByPortfoliosIds(portfoliosIds)
+                .investmentPositions();
+        List<BigDecimal> investmentPositionsPrices = new ArrayList<>();
+        investmentPositions.forEach(investmentPosition -> {
+            if (investmentPosition.getCloseDate() == null) {
+                // TODO лешины конвертеры поставить еще сверху
+            }
+            else {
+                // TODO лешины конвертеры поставить еще сверху
+                investmentPositionsPrices.add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+            }
+        });
+        Optional<BigDecimal> totalPortfoliosPriceOptional = investmentPositionsPrices
+                .parallelStream()
+                .reduce(BigDecimal::add);
+
+        return new GetTotalPortfoliosPriceByUserId(
+                true,
+                "Total price of user portfolios has been calculated",
+                totalPortfoliosPriceOptional.orElse(BigDecimal.ZERO)
+        );
+    }
+
+    public GetPortfoliosCountByUserIdResponse getPortfoliosCountByUserId(Long userId) {
+        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
+        return new GetPortfoliosCountByUserIdResponse(
+                true,
+                "Portfolios of user successfully counted",
+                portfolioRepository.countByUser(user)
         );
     }
 }
