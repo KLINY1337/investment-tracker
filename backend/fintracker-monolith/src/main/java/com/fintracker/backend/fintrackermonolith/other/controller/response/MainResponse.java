@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.exchange_rate.controller.response;
+package com.fintracker.backend.fintrackermonolith.other.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
