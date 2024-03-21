@@ -29,7 +29,8 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
 
     private final UserService userService;
-    private final InvestmentPositionService investmentPositionService;
+    //todo fix circular dependency below
+//    private final InvestmentPositionService investmentPositionService;
     private final AssetService assetService;
 
     public CreatePortfolioResponse createPortfolio(Long userId, String name) {
@@ -101,30 +102,37 @@ public class PortfolioService {
     }
 
     public GetTotalPortfoliosPriceByUserId getTotalPortfoliosPriceByUserId(Long userId, Long quoteAssetId) {
-        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
-        Asset asset = assetService.getAssetsByIds(List.of(quoteAssetId)).assets().get(0);
-        List<Long> portfoliosIds = portfolioRepository.findAllIdsByUser(user);
-        List<InvestmentPosition> investmentPositions = investmentPositionService
-                .getInvestmentPositionsByPortfoliosIds(portfoliosIds)
-                .investmentPositions();
-        List<BigDecimal> investmentPositionsPrices = new ArrayList<>();
-        investmentPositions.forEach(investmentPosition -> {
-            if (investmentPosition.getCloseDate() == null) {
-                // TODO лешины конвертеры поставить еще сверху
-            }
-            else {
-                // TODO лешины конвертеры поставить еще сверху
-                investmentPositionsPrices.add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
-            }
-        });
-        Optional<BigDecimal> totalPortfoliosPriceOptional = investmentPositionsPrices
-                .parallelStream()
-                .reduce(BigDecimal::add);
+        //TODO fix circular dependency
+        //┌─────┐
+        //|  investmentPositionService defined in file [C:\Users\Professional\Desktop\investment-tracker\backend\fintracker-monolith\target\classes\com\fintracker\backend\fintrackermonolith\core\module\investment_position\model\service\InvestmentPositionService.class]
+        //↑     ↓
+        //|  portfolioService defined in file [C:\Users\Professional\Desktop\investment-tracker\backend\fintracker-monolith\target\classes\com\fintracker\backend\fintrackermonolith\core\module\portfolio\model\service\PortfolioService.class]
+        //└─────┘
+//        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
+//        Asset asset = assetService.getAssetsByIds(List.of(quoteAssetId)).assets().get(0);
+//        List<Long> portfoliosIds = portfolioRepository.findAllIdsByUser(user);
+//        List<InvestmentPosition> investmentPositions = investmentPositionService
+//                .getInvestmentPositionsByPortfoliosIds(portfoliosIds)
+//                .investmentPositions();
+//        List<BigDecimal> investmentPositionsPrices = new ArrayList<>();
+//        investmentPositions.forEach(investmentPosition -> {
+//            if (investmentPosition.getCloseDate() == null) {
+//                // TODO лешины конвертеры поставить еще сверху
+//            }
+//            else {
+//                // TODO лешины конвертеры поставить еще сверху
+//                investmentPositionsPrices.add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+//            }
+//        });
+//        Optional<BigDecimal> totalPortfoliosPriceOptional = investmentPositionsPrices
+//                .parallelStream()
+//                .reduce(BigDecimal::add);
 
         return new GetTotalPortfoliosPriceByUserId(
                 true,
                 "Total price of user portfolios has been calculated",
-                totalPortfoliosPriceOptional.orElse(BigDecimal.ZERO)
+//                totalPortfoliosPriceOptional.orElse(BigDecimal.ZERO)
+                BigDecimal.ZERO
         );
     }
 
