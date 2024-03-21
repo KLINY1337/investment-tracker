@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/investment_positions")
@@ -68,7 +68,24 @@ public class InvestmentPositionController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity<GetInvestmentPositionPriceByIdResponse> getInvestmentPositionPriceById(@RequestParam Long investmentPositionId, @RequestParam Long quoteAssetId) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionPriceById(investmentPositionId, quoteAssetId));
+    public ResponseEntity<GetInvestmentPositionPriceByIdResponse> getInvestmentPositionPriceById(@RequestParam Long investmentPositionId,
+                                                                                                 @RequestParam Long quoteAssetId,
+                                                                                                 @RequestParam Date quotationDate) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionPriceById(
+                investmentPositionId,
+                quoteAssetId,
+                quotationDate
+        ));
+    }
+
+    @GetMapping("/price/total/byPortfolioId")
+    public ResponseEntity<GetInvestmentPositionsTotalPriceByPortfolioIdResponse> getInvestmentPositionsTotalPriceByPortfolioId(@RequestParam Long portfolioId,
+                                                                                                                               @RequestParam Long quoteAssetId,
+                                                                                                                               @RequestParam Date quotationDate) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsTotalPriceByPortfolioId(
+                portfolioId,
+                quoteAssetId,
+                quotationDate
+        ));
     }
 }

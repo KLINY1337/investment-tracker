@@ -1,5 +1,6 @@
 package com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service;
 
+import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Asset;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
@@ -12,15 +13,14 @@ import com.fintracker.backend.fintrackermonolith.core.module.investment_position
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.exception.InvestmentPositionIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.model.service.TickerService;
+import com.fintracker.backend.fintrackermonolith.core.util.ExchangeRateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.Port;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -134,9 +134,38 @@ public class InvestmentPositionService {
         );
     }
 
-    public GetInvestmentPositionPriceByIdResponse getInvestmentPositionPriceById(Long investmentPositionId, Long quoteAssetId) {
+    public GetInvestmentPositionPriceByIdResponse getInvestmentPositionPriceById(Long investmentPositionId,
+                                                                                 Long quoteAssetId,
+                                                                                 Date quotationDate) {
         InvestmentPosition investmentPosition = getInvestmentPositionsByIds(List.of(investmentPositionId)).investmentPositions().get(0);
+        Asset baseAsset = investmentPosition.getTicker().getBaseAsset();
         Asset quoteAsset = assetService.getAssetsByIds(List.of(quoteAssetId)).assets().get(0);
-        return null;
+        return new GetInvestmentPositionPriceByIdResponse(
+                true,
+                "Investment position price successfully calculated",
+                ExchangeRateUtils.convertCurrencies(
+                        baseAsset.getSymbol(),
+                        quoteAsset.getSymbol(),
+                        investmentPosition.getBaseAssetAmount(),
+                        quotationDate
+                )
+        );
+    }
+
+    public GetInvestmentPositionsTotalPriceByPortfolioIdResponse getInvestmentPositionsTotalPriceByPortfolioId(Long portfolioId,
+                                                                                                               Long quoteAssetId,
+                                                                                                               Date quotationDate) {
+        Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
+        List<InvestmentPosition> investmentPositions = investmentPositionRepository.findAllByPortfolios(List.of(portfolio));
+
+        Optional<BigDecimal> portfolioPriceOptional = investmentPositions.parallelStream()
+                .map(investmentPosition -> getInvestmentPositionPriceById(investmentPosition.getId(), quoteAssetId, quotationDate).investmentPositionPrice())
+                .reduce(BigDecimal::add);
+
+        return new GetInvestmentPositionsTotalPriceByPortfolioIdResponse(
+                true,
+                "Portfolio price successfully calculated",
+                portfolioPriceOptional.orElse(BigDecimal.ZERO)
+        );
     }
 }

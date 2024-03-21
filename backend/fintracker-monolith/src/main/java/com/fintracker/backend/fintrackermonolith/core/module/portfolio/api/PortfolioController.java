@@ -48,11 +48,6 @@ public class PortfolioController {
         ));
     }
 
-//    @GetMapping("/byUserId")
-//    public ResponseEntity<GetTotalPortfoliosPriceByUserId> getTotalPortfoliosPriceByUserId(@RequestParam Long userId, @RequestParam Long quoteAssetId) {
-//        return ResponseEntity.ok(portfolioService.getTotalPortfoliosPriceByUserId(userId, quoteAssetId));
-//    }
-
     @GetMapping("/count/byUserId")
     public ResponseEntity<GetPortfoliosCountByUserIdResponse> getPortfoliosCountByUserId(@RequestParam Long userId) {
         return ResponseEntity.ok(portfolioService.getPortfoliosCountByUserId(userId));
