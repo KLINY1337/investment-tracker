@@ -3,6 +3,7 @@ package com.fintracker.backend.fintrackermonolith.core.module.portfolio.api;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.request.*;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
+import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,10 @@ public class PortfolioController {
     }
 
     @GetMapping("/byIds")
-    public ResponseEntity<GetPortfoliosByIdsResponse> getPortfoliosByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(portfolioService.getPortfoliosByIds(idList));
+    public ResponseEntity<GetPortfoliosByIdsResponse> getPortfoliosByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(portfolioService.getPortfoliosByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @PutMapping
@@ -39,14 +42,16 @@ public class PortfolioController {
     }
 
     @DeleteMapping
-    public ResponseEntity<DeletePortfoliosByIdsResponse> deletePortfoliosByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(portfolioService.deletePortfoliosByIds(idList));
+    public ResponseEntity<DeletePortfoliosByIdsResponse> deletePortfoliosByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(portfolioService.deletePortfoliosByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
-    @GetMapping("/byUserId")
-    public ResponseEntity<GetTotalPortfoliosPriceByUserId> getTotalPortfoliosPriceByUserId(@RequestParam Long userId, @RequestParam Long quoteAssetId) {
-        return ResponseEntity.ok(portfolioService.getTotalPortfoliosPriceByUserId(userId, quoteAssetId));
-    }
+//    @GetMapping("/byUserId")
+//    public ResponseEntity<GetTotalPortfoliosPriceByUserId> getTotalPortfoliosPriceByUserId(@RequestParam Long userId, @RequestParam Long quoteAssetId) {
+//        return ResponseEntity.ok(portfolioService.getTotalPortfoliosPriceByUserId(userId, quoteAssetId));
+//    }
 
     @GetMapping("/count/byUserId")
     public ResponseEntity<GetPortfoliosCountByUserIdResponse> getPortfoliosCountByUserId(@RequestParam Long userId) {

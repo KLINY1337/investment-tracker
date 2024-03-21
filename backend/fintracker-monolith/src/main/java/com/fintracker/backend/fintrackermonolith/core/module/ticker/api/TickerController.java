@@ -7,6 +7,7 @@ import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.response
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.response.GetTickersByIdsResponse;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.response.UpdateTickerByIdResponse;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.model.service.TickerService;
+import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,10 @@ public class TickerController {
     }
 
     @GetMapping
-    public ResponseEntity<GetTickersByIdsResponse> getTickersByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(tickerService.getTickersByIds(idList));
+    public ResponseEntity<GetTickersByIdsResponse> getTickersByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(tickerService.getTickersByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @PutMapping
@@ -57,8 +60,10 @@ public class TickerController {
     }
 
     @DeleteMapping
-    public ResponseEntity<DeleteTickersByIdsResponse> deleteTickersByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(tickerService.deleteTickersByIds(idList));
+    public ResponseEntity<DeleteTickersByIdsResponse> deleteTickersByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(tickerService.deleteTickersByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
 }

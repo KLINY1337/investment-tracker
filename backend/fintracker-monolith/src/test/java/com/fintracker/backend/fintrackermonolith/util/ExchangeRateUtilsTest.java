@@ -1,6 +1,6 @@
 package com.fintracker.backend.fintrackermonolith.util;
 
-import com.fintracker.backend.fintrackermonolith.exchange_rate.util.ExchangeRateUtils;
+import com.fintracker.backend.fintrackermonolith.core.util.ExchangeRateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
