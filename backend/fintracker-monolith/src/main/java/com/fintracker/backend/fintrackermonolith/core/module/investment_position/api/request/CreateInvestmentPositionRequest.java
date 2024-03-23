@@ -11,7 +11,6 @@ import java.util.Date;
 public record CreateInvestmentPositionRequest(
         Long tickerId,
         Long portfolioId,
-        Long marketTypeId,
         @NotNull @PastOrPresent Date openDate,
         @PastOrPresent Date closeDate,
         @NotNull @Positive BigDecimal openQuoteAssetPrice,

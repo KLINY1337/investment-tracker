@@ -42,7 +42,7 @@ public class InvestmentPositionService {
             BigDecimal baseAssetAmount) {
         Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).tickers().get(0);
         Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
-        if (closeDate.before(openDate)) {
+        if (closeDate != null && closeDate.before(openDate)) {
             throw new InvalidTimePeriodException("Open date must be before close date");
         }
         InvestmentPosition investmentPosition = InvestmentPosition.builder()
@@ -87,7 +87,7 @@ public class InvestmentPositionService {
             BigDecimal baseAssetAmount) {
         Ticker ticker = tickerService.getTickersByIds(List.of(tickerId)).tickers().get(0);
         Portfolio portfolio = portfolioService.getPortfoliosByIds(List.of(portfolioId)).portfolios().get(0);
-        if (closeDate.before(openDate)) {
+        if (closeDate != null && closeDate.before(openDate)) {
             throw new InvalidTimePeriodException("Open date must be before close date");
         }
         InvestmentPosition investmentPosition = investmentPositionRepository

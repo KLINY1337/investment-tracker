@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/portfolios")
 @RequiredArgsConstructor
@@ -33,10 +31,11 @@ public class PortfolioController {
     }
 
     @PutMapping
-    public ResponseEntity<UpdatePortfolioByIdResponse> updatePortfolioById(@RequestParam Long id, @RequestBody UpdatePortfolioByIdRequest request) {
+    public ResponseEntity<UpdatePortfolioByIdResponse> updatePortfolioById(@RequestParam Long id, @RequestBody UpdatePortfolioByIdRequest request,
+                                                                           @RequestHeader("Authorization") String authorizationHeader) {
         return ResponseEntity.ok(portfolioService.updatePortfolioById(
                 id,
-                request.userId(),
+                authorizationHeader,
                 request.name()
         ));
     }
@@ -49,7 +48,7 @@ public class PortfolioController {
     }
 
     @GetMapping("/count/byUserId")
-    public ResponseEntity<GetPortfoliosCountByUserIdResponse> getPortfoliosCountByUserId(@RequestParam Long userId) {
-        return ResponseEntity.ok(portfolioService.getPortfoliosCountByUserId(userId));
+    public ResponseEntity<GetPortfoliosCountByUserIdResponse> getPortfoliosCountByUser(@RequestHeader("Authorization") String authorizationHeader) {
+        return ResponseEntity.ok(portfolioService.getPortfoliosCountByUserId(authorizationHeader));
     }
 }

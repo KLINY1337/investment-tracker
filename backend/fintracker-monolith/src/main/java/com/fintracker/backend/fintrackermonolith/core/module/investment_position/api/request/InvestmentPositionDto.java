@@ -15,7 +15,6 @@ import java.util.Date;
 public record InvestmentPositionDto(
         Long tickerId,
         Long portfolioId,
-        Long marketTypeId,
         @NotNull @PastOrPresent Date openDate,
         @PastOrPresent Date closeDate,
         @NotNull @Positive BigDecimal openPriceUSD,

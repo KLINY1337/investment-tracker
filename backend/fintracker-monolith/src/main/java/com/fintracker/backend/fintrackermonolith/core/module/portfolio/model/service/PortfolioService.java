@@ -2,6 +2,7 @@ package com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.se
 
 import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
+import com.fintracker.backend.fintrackermonolith.auth_server.util.AccessTokenUtils;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Asset;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
@@ -13,6 +14,7 @@ import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exc
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.exception.PortfolioIdsNotFoundException;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
 
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
     //private final InvestmentPositionService investmentPositionService;
     //private final AssetService assetService;
 
@@ -65,8 +68,8 @@ public class PortfolioService {
         );
     }
 
-    public UpdatePortfolioByIdResponse updatePortfolioById(Long id, Long userId, String name) {
-        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
+    public UpdatePortfolioByIdResponse updatePortfolioById(Long id, String authorizationHeader, String name) {
+        User user = (User) userDetailsService.loadUserByUsername(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
         if (portfolioRepository.existsByUserAndName(user, name)) {
             throw new PortfolioAlreadyExistsException("Specified portfolio already exists for specified user");
         }
@@ -128,8 +131,9 @@ public class PortfolioService {
 //        );
 //    }
 
-    public GetPortfoliosCountByUserIdResponse getPortfoliosCountByUserId(Long userId) {
-        User user = userService.getUsersByIds(List.of(userId)).users().get(0);
+    public GetPortfoliosCountByUserIdResponse getPortfoliosCountByUserId(String authorizationHeader) {
+        User user = (User) userDetailsService.loadUserByUsername(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
+
         return new GetPortfoliosCountByUserIdResponse(
                 true,
                 "Portfolios of user successfully counted",
