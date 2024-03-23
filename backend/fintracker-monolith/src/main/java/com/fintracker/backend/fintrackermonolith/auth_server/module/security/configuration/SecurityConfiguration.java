@@ -46,7 +46,7 @@ public class SecurityConfiguration {
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
-                .requestMatchers("/auth/**", "/v3/api-docs")
+                .requestMatchers("/auth/**", "/v3/api-docs","/actuator/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
