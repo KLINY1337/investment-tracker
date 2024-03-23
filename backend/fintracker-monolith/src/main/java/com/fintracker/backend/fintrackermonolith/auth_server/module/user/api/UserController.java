@@ -8,6 +8,7 @@ import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.res
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.response.GetUsersResponse;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.response.UpdateUserByIdResponse;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
+import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<GetUsersResponse> getUsersByIds(@Valid @RequestParam List<Long> idList) {
-        GetUsersResponse response = userService.getUsersByIds(idList);
+    public ResponseEntity<GetUsersResponse> getUsersByIds(@Valid @RequestParam String idList) {
+        GetUsersResponse response = userService.getUsersByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        );
 
         if (response.isSuccess()) {
             return ResponseEntity.ok(response);
@@ -56,8 +59,10 @@ public class UserController {
     }
 
     @DeleteMapping
-    ResponseEntity<DeleteUsersByIdsResponse> deleteUsersByIds(@RequestParam List<Long> idList) {
-        DeleteUsersByIdsResponse response = userService.deleteUsersByIds(idList);
+    ResponseEntity<DeleteUsersByIdsResponse> deleteUsersByIds(@RequestParam String idList) {
+        DeleteUsersByIdsResponse response = userService.deleteUsersByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        );
 
         if (response.isSuccess()) {
             return ResponseEntity.ok(response);

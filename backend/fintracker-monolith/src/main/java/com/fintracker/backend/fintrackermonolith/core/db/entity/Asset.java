@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Setter
+@Getter
 @Table(name = "assets")
 @Builder
 @AllArgsConstructor

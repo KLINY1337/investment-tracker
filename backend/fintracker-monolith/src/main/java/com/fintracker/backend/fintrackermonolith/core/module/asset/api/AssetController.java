@@ -7,6 +7,7 @@ import com.fintracker.backend.fintrackermonolith.core.module.asset.api.response.
 import com.fintracker.backend.fintrackermonolith.core.module.asset.api.response.GetAssetsResponse;
 import com.fintracker.backend.fintrackermonolith.core.module.asset.api.response.UpdateAssetByIdResponse;
 import com.fintracker.backend.fintrackermonolith.core.module.asset.model.service.AssetService;
+import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,10 @@ public class AssetController {
     }
 
     @GetMapping
-    public ResponseEntity<GetAssetsResponse> getAssetsByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(assetService.getAssetsByIds(idList));
+    public ResponseEntity<GetAssetsResponse> getAssetsByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(assetService.getAssetsByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @PutMapping
@@ -43,7 +46,9 @@ public class AssetController {
     }
 
     @DeleteMapping
-    ResponseEntity<DeleteAssetsByIdsResponse> deleteAssetsByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(assetService.deleteAssetsByIds(idList));
+    ResponseEntity<DeleteAssetsByIdsResponse> deleteAssetsByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(assetService.deleteAssetsByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 }

@@ -4,12 +4,13 @@ import com.fintracker.backend.fintrackermonolith.core.module.investment_position
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.request.UpdateInvestmentPositionByIdRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service.InvestmentPositionService;
+import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/investment_positions")
@@ -32,8 +33,10 @@ public class InvestmentPositionController {
     }
 
     @GetMapping("/byIds")
-    public ResponseEntity<GetInvestmentPositionsResponse> getInvestmentPositionsByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByIds(idList));
+    public ResponseEntity<GetInvestmentPositionsResponse> getInvestmentPositionsByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @PutMapping
@@ -51,17 +54,38 @@ public class InvestmentPositionController {
     }
 
     @DeleteMapping
-    public ResponseEntity<DeleteInvestmentPositionsByIdsResponse> deleteInvestmentPositionsByIds(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(investmentPositionService.deleteInvestmentPositionsByIds(idList));
+    public ResponseEntity<DeleteInvestmentPositionsByIdsResponse> deleteInvestmentPositionsByIds(@RequestParam String idList) {
+        return ResponseEntity.ok(investmentPositionService.deleteInvestmentPositionsByIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @GetMapping("/byPortfoliosIds")
-    public ResponseEntity<GetInvestmentPositionsByPortfoliosIdsResponse> getInvestmentPositionsByPortfolios(@RequestParam List<Long> idList) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByPortfoliosIds(idList));
+    public ResponseEntity<GetInvestmentPositionsByPortfoliosIdsResponse> getInvestmentPositionsByPortfolios(@RequestParam String idList) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsByPortfoliosIds(
+                RequestParamUtils.parseParamAsList(idList, ",", Long::valueOf)
+        ));
     }
 
     @GetMapping("/price")
-    public ResponseEntity<GetInvestmentPositionPriceByIdResponse> getInvestmentPositionPriceById(@RequestParam Long investmentPositionId, @RequestParam Long quoteAssetId) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionPriceById(investmentPositionId, quoteAssetId));
+    public ResponseEntity<GetInvestmentPositionPriceByIdResponse> getInvestmentPositionPriceById(@RequestParam Long investmentPositionId,
+                                                                                                 @RequestParam Long quoteAssetId,
+                                                                                                 @RequestParam Date quotationDate) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionPriceById(
+                investmentPositionId,
+                quoteAssetId,
+                quotationDate
+        ));
+    }
+
+    @GetMapping("/price/total/byPortfolioId")
+    public ResponseEntity<GetInvestmentPositionsTotalPriceByPortfolioIdResponse> getInvestmentPositionsTotalPriceByPortfolioId(@RequestParam Long portfolioId,
+                                                                                                                               @RequestParam Long quoteAssetId,
+                                                                                                                               @RequestParam Date quotationDate) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsTotalPriceByPortfolioId(
+                portfolioId,
+                quoteAssetId,
+                quotationDate
+        ));
     }
 }

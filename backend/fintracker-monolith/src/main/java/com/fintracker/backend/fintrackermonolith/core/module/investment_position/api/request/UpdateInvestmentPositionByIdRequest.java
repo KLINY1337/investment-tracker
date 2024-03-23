@@ -6,7 +6,6 @@ import java.util.Date;
 public record UpdateInvestmentPositionByIdRequest(
         Long tickerId,
         Long portfolioId,
-        Long marketTypeId,
         Date openDate,
         Date closeDate,
         BigDecimal openPriceUSD,

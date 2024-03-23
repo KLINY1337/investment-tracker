@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.exchange_rate.util;
+package com.fintracker.backend.fintrackermonolith.core.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
