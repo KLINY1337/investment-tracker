@@ -1,0 +1,40 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    environment:
+      POSTGRES_DB: fintracker_sipi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: R4JCwVgWVgNX0ZY0K4gf
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth=scram-sha-256
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    networks:
+      - fintracker_core_network
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  fintracker_monolith:
+    build: ./backend/fintracker-monolith
+    container_name: fintracker_monolith
+    ports:
+      - "8080:8080"
+    networks:
+      - fintracker_core_network
+    environment:
+      - TZ=Europe/Moscow
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+
+networks:
+  fintracker_core_network:
+
+volumes:
+  postgres_data:
