@@ -9,9 +9,8 @@ global:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  - scrape-configs:
-    - job_name: "fintracker"
-      scrape_interval: 5s
-      static_configs:
-        - targets: ["fintracker_monolith:8080"]
-      metric_path: "/actuator/prometheus"
+  - job_name: "fintracker"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["fintracker_monolith:8080"]
+    metric_path: "/actuator/prometheus"
