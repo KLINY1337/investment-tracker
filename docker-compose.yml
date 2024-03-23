@@ -38,7 +38,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - 9090:9090
+      - "9090:9090"
     restart: unless-stopped
     volumes:
       - ./backend/prometheus:/etc/prometheus
