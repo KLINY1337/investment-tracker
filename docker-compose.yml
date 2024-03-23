@@ -40,6 +40,8 @@ services:
     ports:
       - "9090:9090"
     restart: unless-stopped
+    networks:
+      - fintracker_core_network
     volumes:
       - ./backend/prometheus:/etc/prometheus
       - prom_data:/prometheus
