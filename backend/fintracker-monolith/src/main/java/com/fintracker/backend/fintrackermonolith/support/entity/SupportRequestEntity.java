@@ -1,6 +1,6 @@
-package com.fintracker.backend.fintrackermonolith.other.entity;
+package com.fintracker.backend.fintrackermonolith.support.entity;
 
-import com.fintracker.backend.fintrackermonolith.other.enumeration.SupportRequestStatus;
+import com.fintracker.backend.fintrackermonolith.support.enumeration.SupportRequestStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.other.exception.support;
+package com.fintracker.backend.fintrackermonolith.support.exception.support;
 
 public class SupportRequestNotFoundException extends RuntimeException {
     public SupportRequestNotFoundException () {

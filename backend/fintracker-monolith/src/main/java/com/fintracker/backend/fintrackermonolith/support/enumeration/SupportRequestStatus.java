@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.other.enumeration;
+package com.fintracker.backend.fintrackermonolith.support.enumeration;
 
 public enum SupportRequestStatus {
     OPEN,

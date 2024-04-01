@@ -1,4 +1,4 @@
-package com.fintracker.backend.fintrackermonolith.other.controller;
+package com.fintracker.backend.fintrackermonolith.support.controller;
 
 import com.fintracker.backend.fintrackermonolith.other.controller.request.SupportRequest;
 import com.fintracker.backend.fintrackermonolith.other.controller.response.MainResponse;
