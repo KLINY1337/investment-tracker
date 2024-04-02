@@ -34,12 +34,11 @@ public class GigachatApiConnector {
     public Mono<String> getToken() {
         String uuid = UUID.randomUUID().toString();
         return gigachatWebClient.post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/v2/oauth")
-                        .queryParam("scope", "GIGACHAT_API_PERS")
-                        .build())
+                .uri("https://ngw.devices.sberbank.ru:9443/api/v2/oauth")
                 .header("RqUID", uuid)
-                .body(BodyInserters.empty())
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Accept", "application/json")
+                .body(BodyInserters.fromFormData("scope","GIGACHAT_API_PERS"))
                 .retrieve()
                 .bodyToMono(GigachatToken.class)
                 .publishOn(Schedulers.boundedElastic())

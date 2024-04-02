@@ -9,18 +9,18 @@ import com.fintracker.backend.fintrackermonolith.gigachat.db.entity.GigachatToke
 import com.fintracker.backend.fintrackermonolith.gigachat.util.GigachatApiConnector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-@RestController("/gigachat")
+@RestController
+@RequestMapping("/gigachat")
 @RequiredArgsConstructor
 public class GigachatController {
     private final GigachatApiConnector gigachatApiConnector;
 
     @PostMapping("/token")
     public ResponseEntity<Mono<String>> token(){
+        System.out.println("123");
         return ResponseEntity.ok(gigachatApiConnector.getToken());
     }
 
