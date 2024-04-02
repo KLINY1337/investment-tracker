@@ -1,8 +1,7 @@
 package com.fintracker.backend.fintrackermonolith.support.controller;
-
-import com.fintracker.backend.fintrackermonolith.other.controller.request.SupportRequest;
 import com.fintracker.backend.fintrackermonolith.other.controller.response.MainResponse;
-import com.fintracker.backend.fintrackermonolith.other.service.support.SupportService;
+import com.fintracker.backend.fintrackermonolith.support.controller.request.SupportRequest;
+import com.fintracker.backend.fintrackermonolith.support.service.support.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

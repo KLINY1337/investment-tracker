@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController("/gigachat")
 @RequiredArgsConstructor
@@ -19,7 +20,9 @@ public class GigachatController {
     private final GigachatApiConnector gigachatApiConnector;
 
     @PostMapping("/token")
-    public ResponseEntity<String> token(){
+    public ResponseEntity<Mono<String>> token(){
         return ResponseEntity.ok(gigachatApiConnector.getToken());
     }
+
+
 }
