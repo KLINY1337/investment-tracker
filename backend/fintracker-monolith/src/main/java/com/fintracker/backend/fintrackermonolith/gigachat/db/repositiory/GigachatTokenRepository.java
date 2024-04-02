@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface GigachatTokenRepository extends JpaRepository<GigachatToken, String> {
 
     @Query("SELECT t FROM GigachatToken t WHERE t.expires_at > CURRENT_TIMESTAMP")
-    String getLastValidToken();
+    GigachatToken getLastValidToken();
 }
