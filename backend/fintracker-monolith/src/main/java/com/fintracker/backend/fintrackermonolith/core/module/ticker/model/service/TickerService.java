@@ -144,4 +144,8 @@ public class TickerService {
                 processableAndUnprocessableIds.get(true).size()
         );
     }
+
+    public Ticker getTickerById(long tickerId) {
+        return tickerRepository.findById(tickerId).orElseThrow(() -> new TickerIdsNotFoundException("Specified ticker does not exist in database", List.of(tickerId)));
+    }
 }
