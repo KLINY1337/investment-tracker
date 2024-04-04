@@ -34,4 +34,8 @@ public class TickerPriceService {
                 tickerPrice
         );
     }
+
+    public List<TickerPrice> getTickerPriceByTicker(Ticker ticker) {
+        return tickerPriceRepository.findByTicker(ticker);
+    }
 }

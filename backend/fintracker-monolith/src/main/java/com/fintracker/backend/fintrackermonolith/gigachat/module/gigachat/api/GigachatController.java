@@ -1,12 +1,7 @@
 package com.fintracker.backend.fintrackermonolith.gigachat.module.gigachat.api;
 
-import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
-import com.fintracker.backend.fintrackermonolith.auth_server.module.auth.api.request.LoginRequest;
-import com.fintracker.backend.fintrackermonolith.auth_server.module.auth.api.request.SignUpRequest;
-import com.fintracker.backend.fintrackermonolith.auth_server.module.auth.api.response.LoginResponse;
-import com.fintracker.backend.fintrackermonolith.auth_server.module.auth.model.service.AuthService;
-import com.fintracker.backend.fintrackermonolith.gigachat.db.entity.GigachatToken;
 import com.fintracker.backend.fintrackermonolith.gigachat.module.gigachat.api.response.GigachatModelResponse;
+import com.fintracker.backend.fintrackermonolith.gigachat.module.gigachat.api.response.TickerAnalyzeResponse;
 import com.fintracker.backend.fintrackermonolith.gigachat.module.gigachat.model.exception.GigachatTokenException;
 import com.fintracker.backend.fintrackermonolith.gigachat.util.GigachatApiConnector;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +24,26 @@ public class GigachatController {
         return ResponseEntity.ok(gigachatApiConnector.getToken());
     }
 
-    @PostMapping("/generate")
-    public ResponseEntity<Mono<GigachatModelResponse>> generate(){
+    @PostMapping("/ping")
+    public ResponseEntity<Mono<GigachatModelResponse>> ping(){
         System.out.println("generation");
         try{
-            return ResponseEntity.ok(gigachatApiConnector.getResponse("Кто ты?"));
+            return ResponseEntity.ok(gigachatApiConnector.ping("Кто ты?"));
         } catch (GigachatTokenException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+    }
+
+
+    @GetMapping("/admin/analyze")
+    public ResponseEntity<Mono<GigachatModelResponse>> analyzeAdmin(@RequestParam int tickerId) throws GigachatTokenException {
+        return ResponseEntity.ok(gigachatApiConnector.analyzePriceGigachat(tickerId));
+    }
+
+    @GetMapping("/analyze")
+    public ResponseEntity<TickerAnalyzeResponse> analyze(@RequestParam int tickerId) throws GigachatTokenException {
+        return ResponseEntity.ok(gigachatApiConnector.analyzePrice(tickerId));
     }
 
 
