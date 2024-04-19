@@ -35,7 +35,8 @@ public class AuthService {
                 true,
                 "User successfully authenticated",
                 AccessTokenUtils.generateToken(user),
-                AccessTokenUtils.getExpirationTime()
+                AccessTokenUtils.getExpirationTime(),
+                user
         );
     }
 }

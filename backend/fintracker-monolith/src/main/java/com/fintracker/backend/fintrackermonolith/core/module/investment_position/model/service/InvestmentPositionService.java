@@ -1,11 +1,14 @@
 package com.fintracker.backend.fintrackermonolith.core.module.investment_position.model.service;
 
+import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Asset;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Ticker;
+import com.fintracker.backend.fintrackermonolith.core.db.enumeration.MarketType;
 import com.fintracker.backend.fintrackermonolith.core.db.repository.InvestmentPositionRepository;
+import com.fintracker.backend.fintrackermonolith.core.db.repository.PortfolioRepository;
 import com.fintracker.backend.fintrackermonolith.core.module.asset.model.exception.AssetIdsNotFoundException;
 import com.fintracker.backend.fintrackermonolith.core.module.asset.model.service.AssetService;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.*;
@@ -31,6 +34,8 @@ public class InvestmentPositionService {
     private final TickerService tickerService;
     private final PortfolioService portfolioService;
     private final AssetService assetService;
+    private final UserService userService;
+    private final PortfolioRepository portfolioRepository;
 
     public CreateInvestmentPositionResponse createInvestmentPosition(
             Long tickerId,
@@ -74,6 +79,72 @@ public class InvestmentPositionService {
                 "Specified investment positions retrieved from database",
                 investmentPositionRepository.findAllById(processableAndUnprocessableIds.get(true))
         );
+    }
+
+    public GetInvestmentPositionsDistributionByUserIdResponse getInvestmentPositionsDistributionByUserId(Long userId) {
+        List<InvestmentPosition> investmentPositions = investmentPositionRepository.findByPortfolio_User_Id(userId);
+        final BigDecimal[] spotPrice = {BigDecimal.ZERO};
+        final BigDecimal[] futuresPrice = {BigDecimal.ZERO};
+        investmentPositions.forEach(investmentPosition -> {
+            switch (investmentPosition.getTicker().getMarketType()) {
+                case FUTURE -> futuresPrice[0] = futuresPrice[0].add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+                case SPOT -> spotPrice[0] = spotPrice[0].add(ExchangeRateUtils.convertCurrencies(investmentPosition.getTicker().getBaseAsset().getSymbol(), investmentPosition.getTicker().getQuoteAsset().getSymbol(), investmentPosition.getBaseAssetAmount(), new Date()));
+            }
+        });
+
+        BigDecimal fullPrice = spotPrice[0].add(futuresPrice[0]);
+        return new GetInvestmentPositionsDistributionByUserIdResponse(
+                spotPrice[0].divide(fullPrice).multiply(new BigDecimal(100)),
+                futuresPrice[0].divide(fullPrice).multiply(new BigDecimal(100))
+        );
+    }
+
+    public GetInvestmentPositionsTotalPriceByUserIdResponse getInvestmentPositionsTotalPriceByUserId(Long userId) {
+        List<InvestmentPosition> investmentPositions = investmentPositionRepository.findByPortfolio_User_Id(userId);
+        final BigDecimal[] totalInvestmentPositionsPrice = {BigDecimal.ZERO};
+        investmentPositions.forEach(investmentPosition -> {
+            switch (investmentPosition.getTicker().getMarketType()) {
+                case FUTURE -> totalInvestmentPositionsPrice[0] = totalInvestmentPositionsPrice[0].add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+                case SPOT -> totalInvestmentPositionsPrice[0] = totalInvestmentPositionsPrice[0].add(ExchangeRateUtils.convertCurrencies(investmentPosition.getTicker().getBaseAsset().getSymbol(), investmentPosition.getTicker().getQuoteAsset().getSymbol(), investmentPosition.getBaseAssetAmount(), new Date()));
+            }
+        });
+        return new GetInvestmentPositionsTotalPriceByUserIdResponse(
+                true,
+                "Investment positions price poshitani",
+                totalInvestmentPositionsPrice[0]
+        );
+    }
+
+    public GetProfitByPortfolioIdResponse getProfitByPortfolioId(Long portfolioId) {
+        List<InvestmentPosition> investmentPositions = getInvestmentPositionsByPortfoliosIds(List.of(portfolioId)).investmentPositions();
+        final BigDecimal[] initialPrice = {BigDecimal.ZERO};
+        investmentPositions.forEach(investmentPosition -> {
+            initialPrice[0] = initialPrice[0].add(investmentPosition.getBaseAssetAmount().multiply(investmentPosition.getOpenQuoteAssetPrice()));
+        });
+
+        final BigDecimal[] currentPrice = {BigDecimal.ZERO};
+        investmentPositions.forEach(investmentPosition -> {
+            switch (investmentPosition.getTicker().getMarketType()) {
+                case FUTURE -> currentPrice[0] = currentPrice[0].add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+                case SPOT -> currentPrice[0] = currentPrice[0].add(ExchangeRateUtils.convertCurrencies(investmentPosition.getTicker().getBaseAsset().getSymbol(), investmentPosition.getTicker().getQuoteAsset().getSymbol(), investmentPosition.getBaseAssetAmount(), new Date()));
+            }
+        });
+
+        return new GetProfitByPortfolioIdResponse(
+                true,
+                "Poshitali profit",
+                currentPrice[0].divide(initialPrice[0]).subtract(BigDecimal.ONE).multiply(new BigDecimal(100))
+        );
+    }
+
+    public GetTotalPortfolioPriceByPortfolioIdInTimeResponse getTotalPortfolioPriceByPortfolioIdAndDate(Long portfolioId, Date date) {
+        List<Date> dates = new ArrayList<>();
+        List<BigDecimal> prices = new ArrayList<>();
+        investmentPositionRepository.findByPortfolio_IdAndOpenDateBefore(portfolioId, date).forEach(investmentPosition -> {
+            dates.add(investmentPosition.getOpenDate());
+            prices.add(investmentPosition.getOpenQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
+        });
+        return new GetTotalPortfolioPriceByPortfolioIdInTimeResponse(dates, prices);
     }
 
     public UpdateInvestmentPositionByIdResponse updateInvestmentPositionById(

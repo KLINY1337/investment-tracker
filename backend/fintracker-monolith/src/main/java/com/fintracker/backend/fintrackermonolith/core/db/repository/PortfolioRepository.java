@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
+    List<Portfolio> findByUser_Id(Long id);
     @Query("select count(p) from Portfolio p where p.user = ?1")
     long countByUser(User user);
     @Query("select p.id from Portfolio p where p.user = ?1")

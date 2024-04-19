@@ -88,4 +88,26 @@ public class InvestmentPositionController {
                 quotationDate
         ));
     }
+
+    @GetMapping("/price/total/byUserId")
+    public ResponseEntity<GetInvestmentPositionsTotalPriceByUserIdResponse> getInvestmentPositionsTotalPriceByUserId(@RequestParam Long userId) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsTotalPriceByUserId(userId));
+    }
+
+    @GetMapping("/profit/byPortfolioId")
+    public ResponseEntity<GetProfitByPortfolioIdResponse> getProfitByPortfolioId(@RequestParam Long portfolioId) {
+        return ResponseEntity.ok(investmentPositionService.getProfitByPortfolioId(portfolioId));
+    }
+
+    @GetMapping("/distribution/byUserId")
+    public ResponseEntity<GetInvestmentPositionsDistributionByUserIdResponse> getInvestmentPositionsDistributionByUserId(@RequestParam Long userId) {
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsDistributionByUserId(userId));
+    }
+
+    @GetMapping("/price/total/byPortfolioIdAndDate")
+    public ResponseEntity<GetTotalPortfolioPriceByPortfolioIdInTimeResponse> getTotalPortfolioPriceByPortfolioIdAndDate(@RequestParam Long portfolioId,
+                                                                                                                        @RequestParam Date date) {
+        return ResponseEntity.ok(investmentPositionService.getTotalPortfolioPriceByPortfolioIdAndDate(portfolioId, date));
+    }
+
 }

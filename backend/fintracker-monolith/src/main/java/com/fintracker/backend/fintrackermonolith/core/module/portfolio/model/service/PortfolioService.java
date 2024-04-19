@@ -68,6 +68,10 @@ public class PortfolioService {
         );
     }
 
+    public List<Portfolio> getPortfoliosByUserId(Long userId) {
+        return portfolioRepository.findByUser_Id(userId);
+    }
+
     public UpdatePortfolioByIdResponse updatePortfolioById(Long id, String authorizationHeader, String name) {
         User user = (User) userDetailsService.loadUserByUsername(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
         if (portfolioRepository.existsByUserAndName(user, name)) {
