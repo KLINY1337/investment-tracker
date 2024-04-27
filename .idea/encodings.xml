@@ -3,5 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/backend/auth-microservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/auth-microservice/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/fintracker-monolith/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/fintracker-monolith/src/main/resources" charset="UTF-8" />
   </component>
 </project>
