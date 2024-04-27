@@ -17,7 +17,7 @@ services:
       - fintracker_core_network
     restart: unless-stopped
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /mnt/storage/database/investment:/var/lib/postgresql/data
   
   fintracker_monolith:
     build: ./backend/fintracker-monolith
