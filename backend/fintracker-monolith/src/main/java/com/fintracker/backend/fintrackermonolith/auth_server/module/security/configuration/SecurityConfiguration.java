@@ -59,6 +59,8 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
+                "https://investment.lexa2hk.ru:443",
+                "https://investment.lexa2hk.ru",
                 protocol +"://" + hostname + ":" + port,
                 protocol +"://" + "localhost" + ":" + port));
         configuration.setAllowedMethods(List.of("GET","POST",  "PUT", "DELETE"));
