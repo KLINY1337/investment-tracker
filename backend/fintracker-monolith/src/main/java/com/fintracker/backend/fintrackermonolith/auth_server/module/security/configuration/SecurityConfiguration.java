@@ -42,6 +42,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(AbstractHttpConfigurer::disable);
         http.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,23 +55,23 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of(
-                "https://investment.lexa2hk.ru:443",
-                "https://investment.lexa2hk.ru",
-                protocol +"://" + hostname + ":" + port,
-                protocol +"://" + "localhost" + ":" + port));
-        configuration.setAllowedMethods(List.of("GET","POST",  "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**",configuration);
-
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.setAllowedOrigins(List.of(
+//                "https://investment.lexa2hk.ru:443",
+//                "https://investment.lexa2hk.ru",
+//                protocol +"://" + hostname + ":" + port,
+//                protocol +"://" + "localhost" + ":" + port));
+//        configuration.setAllowedMethods(List.of("GET","POST",  "PUT", "DELETE"));
+//        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        source.registerCorsConfiguration("/**",configuration);
+//
+//        return source;
+//    }
 
     @Bean
     AuthenticationProvider authenticationProvider() {
