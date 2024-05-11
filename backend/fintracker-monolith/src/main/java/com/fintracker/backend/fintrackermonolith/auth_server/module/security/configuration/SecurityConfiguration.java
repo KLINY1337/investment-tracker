@@ -49,7 +49,7 @@ public class SecurityConfiguration {
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .requestMatchers("/auth/**", "/v3/api-docs","/actuator/**","/gigachat/**")
+                .requestMatchers("/auth/**", "/v3/api-docs","/actuator/**","/gigachat/**", "/swagger-ui.html")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
