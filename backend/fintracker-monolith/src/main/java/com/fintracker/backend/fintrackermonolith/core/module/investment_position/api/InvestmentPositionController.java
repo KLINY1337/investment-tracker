@@ -1,5 +1,8 @@
 package com.fintracker.backend.fintrackermonolith.core.module.investment_position.api;
 
+import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
+import com.fintracker.backend.fintrackermonolith.auth_server.db.repository.UserRepository;
+import com.fintracker.backend.fintrackermonolith.auth_server.util.AccessTokenUtils;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.request.CreateInvestmentPositionRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.request.UpdateInvestmentPositionByIdRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.investment_position.api.response.*;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/investment_positions")
@@ -18,6 +22,7 @@ import java.util.Date;
 public class InvestmentPositionController {
 
     private final InvestmentPositionService investmentPositionService;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<CreateInvestmentPositionResponse> createInvestmentPosition(@Valid @RequestBody CreateInvestmentPositionRequest request) {
@@ -89,9 +94,10 @@ public class InvestmentPositionController {
         ));
     }
 
-    @GetMapping("/price/total/byUserId")
-    public ResponseEntity<GetInvestmentPositionsTotalPriceByUserIdResponse> getInvestmentPositionsTotalPriceByUserId(@RequestParam Long userId) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsTotalPriceByUserId(userId));
+    @GetMapping("/price/total")
+    public ResponseEntity<GetInvestmentPositionsTotalPriceByUserIdResponse> getInvestmentPositionsTotalPriceByUserId(@RequestHeader("Authorization") String authorizationHeader) {
+        Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsTotalPriceByUserId(user.get().getId()));
     }
 
     @GetMapping("/profit/byPortfolioId")
@@ -99,9 +105,10 @@ public class InvestmentPositionController {
         return ResponseEntity.ok(investmentPositionService.getProfitByPortfolioId(portfolioId));
     }
 
-    @GetMapping("/distribution/byUserId")
-    public ResponseEntity<GetInvestmentPositionsDistributionByUserIdResponse> getInvestmentPositionsDistributionByUserId(@RequestParam Long userId) {
-        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsDistributionByUserId(userId));
+    @GetMapping("/distribution")
+    public ResponseEntity<GetInvestmentPositionsDistributionByUserIdResponse> getInvestmentPositionsDistributionByUserId(@RequestHeader("Authorization") String authorizationHeader) {
+        Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
+        return ResponseEntity.ok(investmentPositionService.getInvestmentPositionsDistributionByUserId(user.get().getId()));
     }
 
     @GetMapping("/price/total/byPortfolioIdAndDate")
