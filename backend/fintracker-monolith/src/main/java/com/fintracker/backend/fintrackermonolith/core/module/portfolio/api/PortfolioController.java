@@ -24,9 +24,11 @@ public class PortfolioController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<CreatePortfolioResponse> createPortfolio(@RequestBody CreatePortfolioRequest request) {
+    public ResponseEntity<CreatePortfolioResponse> createPortfolio(@RequestHeader("Authorization") String authorizationHeader,
+                                                                   @RequestBody CreatePortfolioRequest request) {
+        Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
         return ResponseEntity.ok(portfolioService.createPortfolio(
-                request.userId(),
+                user.get().getId(),
                 request.name()
         ));
     }
