@@ -4,6 +4,8 @@ import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
 import com.fintracker.backend.fintrackermonolith.auth_server.db.repository.UserRepository;
 import com.fintracker.backend.fintrackermonolith.auth_server.util.AccessTokenUtils;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
+import com.fintracker.backend.fintrackermonolith.core.db.repository.InvestmentPositionRepository;
+import com.fintracker.backend.fintrackermonolith.core.db.repository.PortfolioRepository;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.request.*;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.api.response.*;
 import com.fintracker.backend.fintrackermonolith.core.module.portfolio.model.service.PortfolioService;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,8 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
     private final UserRepository userRepository;
+    private final PortfolioRepository portfolioRepository;
+    private final InvestmentPositionRepository investmentPositionRepository;
 
     @PostMapping
     public ResponseEntity<CreatePortfolioResponse> createPortfolio(@RequestHeader("Authorization") String authorizationHeader,
@@ -66,5 +71,12 @@ public class PortfolioController {
     public ResponseEntity<List<Portfolio>> getPortfoliosByUserId(@RequestHeader("Authorization") String authorizationHeader) {
         Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authorizationHeader.substring(7)));
         return ResponseEntity.ok(portfolioService.getPortfoliosByUserId(user.get().getId()));
+    }
+
+    @GetMapping("/chart/price")
+    public ResponseEntity<List<BigDecimal>> getPortfolioPriceChartData(@RequestParam Long portfolioId) {
+        return ResponseEntity.ok(investmentPositionRepository.findAllByPortfolios(List.of(portfolioRepository.findById(portfolioId).get())).stream()
+                .map(investmentPosition -> investmentPosition.getBaseAssetAmount().multiply(investmentPosition.getOpenQuoteAssetPrice()))
+                .toList());
     }
 }
