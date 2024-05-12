@@ -1,5 +1,7 @@
 package com.fintracker.backend.fintrackermonolith.core.module.ticker.api;
 
+import com.fintracker.backend.fintrackermonolith.core.db.entity.Ticker;
+import com.fintracker.backend.fintrackermonolith.core.db.repository.TickerRepository;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.request.CreateTickerRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.request.UpdateTickerByIdRequest;
 import com.fintracker.backend.fintrackermonolith.core.module.ticker.api.response.CreateTickerResponse;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TickerController {
 
     private final TickerService tickerService;
+    private final TickerRepository tickerRepository;
 
     @PostMapping
     public ResponseEntity<CreateTickerResponse> createTicker(@RequestBody CreateTickerRequest request) {
@@ -34,6 +37,11 @@ public class TickerController {
                 request.marketType(),
                 request.inUse()
         ));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Ticker>> getAllTickers() {
+        return ResponseEntity.ok(tickerRepository.findAll());
     }
 
     @GetMapping
