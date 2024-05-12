@@ -76,4 +76,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @GetMapping
+    ResponseEntity<User> getUserByAccessToken(@RequestHeader("Authorization") String authHeader) {
+        Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authHeader.substring(7)));
+        return ResponseEntity.ofNullable(user.orElse(null));
+    }
 }
