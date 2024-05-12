@@ -3,6 +3,7 @@ package com.fintracker.backend.fintrackermonolith.core.module.portfolio.api;
 import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
 import com.fintracker.backend.fintrackermonolith.auth_server.db.repository.UserRepository;
 import com.fintracker.backend.fintrackermonolith.auth_server.util.AccessTokenUtils;
+import com.fintracker.backend.fintrackermonolith.core.db.entity.InvestmentPosition;
 import com.fintracker.backend.fintrackermonolith.core.db.entity.Portfolio;
 import com.fintracker.backend.fintrackermonolith.core.db.repository.InvestmentPositionRepository;
 import com.fintracker.backend.fintrackermonolith.core.db.repository.PortfolioRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,8 +77,20 @@ public class PortfolioController {
 
     @GetMapping("/chart/price")
     public ResponseEntity<List<BigDecimal>> getPortfolioPriceChartData(@RequestParam Long portfolioId) {
+        List<InvestmentPosition> investmentPositions = investmentPositionRepository.findAllByPortfolios(List.of(portfolioRepository.findById(portfolioId).get()));
+        List<BigDecimal> result = new ArrayList<>();
+        final BigDecimal[] cumSum = {BigDecimal.ZERO};
+        investmentPositions.forEach(investmentPosition -> {
+            cumSum[0] = cumSum[0].add(investmentPosition.getBaseAssetAmount().multiply(investmentPosition.getOpenQuoteAssetPrice()));
+            result.add(cumSum[0]);
+        });
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<BigDecimal> getPortfolioPriceById(@RequestParam Long portfolioId) {
         return ResponseEntity.ok(investmentPositionRepository.findAllByPortfolios(List.of(portfolioRepository.findById(portfolioId).get())).stream()
                 .map(investmentPosition -> investmentPosition.getBaseAssetAmount().multiply(investmentPosition.getOpenQuoteAssetPrice()))
-                .toList());
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }
