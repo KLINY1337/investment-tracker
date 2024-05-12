@@ -1,5 +1,7 @@
 package com.fintracker.backend.fintrackermonolith.auth_server.module.user.api;
 
+import com.fintracker.backend.fintrackermonolith.auth_server.db.entity.User;
+import com.fintracker.backend.fintrackermonolith.auth_server.db.repository.UserRepository;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.request.CreateUserRequest;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.request.GetUsersByIdsRequest;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.request.UpdateUserByIdRequest;
@@ -8,6 +10,7 @@ import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.res
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.response.GetUsersResponse;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.api.response.UpdateUserByIdResponse;
 import com.fintracker.backend.fintrackermonolith.auth_server.module.user.model.service.UserService;
+import com.fintracker.backend.fintrackermonolith.auth_server.util.AccessTokenUtils;
 import com.fintracker.backend.fintrackermonolith.core.util.RequestParamUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -22,6 +26,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
@@ -48,8 +53,9 @@ public class UserController {
     }
 
     @PutMapping
-    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestParam Long id, @RequestBody UpdateUserByIdRequest request) {
-        UpdateUserByIdResponse response = userService.updateUserById(id, request.username(), request.email(), request.password());
+    ResponseEntity<UpdateUserByIdResponse> updateUserById(@RequestHeader("Authorization") String authHeader, @RequestBody UpdateUserByIdRequest request) {
+        Optional<User> user = userRepository.findUserByUsernameOrEmail(AccessTokenUtils.getUsernameFromToken(authHeader.substring(7)));
+        UpdateUserByIdResponse response = userService.updateUserById(user.get().getId(), request.username(), request.email(), request.password());
 
         if (response.isSuccess()) {
             return ResponseEntity.ok(response);
