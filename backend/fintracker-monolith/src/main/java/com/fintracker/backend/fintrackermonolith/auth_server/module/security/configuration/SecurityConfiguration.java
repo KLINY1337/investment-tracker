@@ -52,7 +52,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/auth/**", "/v3/api-docs","/actuator/**","/gigachat/**", "/swagger-ui.html")
                 .permitAll()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
         );
         return http.build();
     }
