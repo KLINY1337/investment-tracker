@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @include mat.core();
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Roboto+Flex:opsz,wght@8..144,200;8..144,300;8..144,400;8..144,500;8..144,600;8..144,700;8..144,800;8..144,900;8..144,1000&display=swap');
+@import "node_modules/angular-notifier/styles";
 
 $my_accent_palette: (
   50: #e5eaff,
@@ -12,7 +13,7 @@ $my_accent_palette: (
   600: #2146ff,
   700: #1b3dff,
   800: #1634ff,
-  900: #0d25ff,
+  900: #1b3dff,
   A100: #ffffff,
   A200: #f6f7ff,
   A400: #c3c8ff,
@@ -40,12 +41,18 @@ $my_accent_palette: (
   font-style: normal;
   font-weight: normal;
 }
-
+@font-face {
+  font-family: 'Graphik';
+  src: url("assets/Graphik-Regular-Web.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 $my-primary: mat.define-palette($my_accent_palette, 100);
-$my-accent: mat.define-palette(mat.$amber-palette, 900);
+$my-accent: mat.define-palette($my_accent_palette, 900);
 $my-warn: mat.define-palette(mat.$deep-orange-palette, 700);
 $my-fonts: mat.define-typography-config(
-  $font-family: 'Roboto Flex',
+  $font-family: 'Graphik',
 );
 
 $my-theme: mat.define-light-theme((
@@ -59,43 +66,80 @@ $my-theme: mat.define-light-theme((
 
 //@include mat.core-theme($my-theme);
 @include mat.all-component-themes($my-theme);
+//@font-face {
+//  font-family: 'Roboto Regular', sans-serif;
+//  src: url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+//  font-style: normal;
+//  font-weight: normal;
+//}
 @font-face {
-  font-family: 'Roboto Regular', sans-serif;
-  src: url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-  font-style: normal;
-  font-weight: normal;
-}
-@font-face {
-  src: url(https://fonts.gstatic.com/s/poppins/v21/pxiEyp8kv8JHgFVrJJnecnFHGPezSQ.woff2) format('woff2');
-  font-family: 'Poppins';
+  font-family: 'Graphik';
+  src: url("assets/Graphik-Regular-Web.ttf") format("truetype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
+
 html, body { height: 100%; }
-body { margin: 0; font-family: "Poppins", sans-serif }
+body { margin: 0; font-family: "Graphik", sans-serif !important;}
 p{
-  font-size: 20px;
-  font-family: "Poppins", sans-serif;
+  font-size: 20px !important;
+  font-family: "Graphik", sans-serif !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 small{
-  font-size: 13px;
-   font-family: "Poppins", sans-serif;
+  font-size: 13px !important;
+   font-family: "Graphik", sans-serif !important;
    padding: 0 !important;
    margin: 0 !important;
  }
 a {
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
+  font-family: "Graphik", sans-serif !important;
+  font-size: 18px !important;
   display: block;
   margin-block-start: 0;
   margin-block-end: 0;
   margin-inline-start: 0;
   margin-inline-end: 0;
-  padding-bottom: 14px;
-  color: #0d25ff;
+  padding: 0 !important;
+  color: black;
+  transition: 20ms;
   cursor: pointer;
   text-decoration: none;
+}
+a:hover {
+  color: #0d25ff;
+}
+h1 {
+  font-size: 30px  !important;
+  font-weight: bold !important;
+  font-family: "Graphik", sans-serif !important;
+}
+h2 {
+  font-size: 24px  !important;
+  font-weight: bold !important;
+  font-family: "Graphik", sans-serif !important;
+}
+.advanced-pie-legend.legend-items-container.legend-items.legend-item .item-value {
+  margin-top: 10px !important;
+}
+.advanced-pie-legend .total-value {
+  margin-top: 10px !important;
+}
+.advanced-pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.advanced-pie-legend .legend-items-container .legend-items{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.advanced-pie-legend .legend-items-container .legend-items .legend-item .item-label {
+  margin-top: 0 !important;
+}
+.advanced-pie-legend .legend-items-container .legend-items {
+  overflow: visible !important;
 }

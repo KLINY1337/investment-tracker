@@ -1,0 +1,51 @@
+<h1>Добавление новой позиции</h1>
+<form [formGroup]="createStartup"  (ngSubmit)="submit()" style="margin-top:60px; display: flex; flex-direction: column; gap: 1rem">
+  <mat-form-field class="margin-top" appearance="outline" style="width: 450px">
+    <mat-label>Цена открытия</mat-label>
+    <input type="number" matInput formControlName="openQuoteAssetPrice">
+    <mat-error *ngIf="!openQuoteAssetPrice.valid">Заполните обязательное поле</mat-error>
+  </mat-form-field>
+  <mat-form-field class="margin-top" appearance="outline" style="width: 450px">
+    <mat-label>Цена закрытия</mat-label>
+    <input type="number" matInput formControlName="closeQuoteAssetPrice">
+    <mat-error *ngIf="!closeQuoteAssetPrice.valid">Заполните обязательное поле</mat-error>
+  </mat-form-field>
+  <mat-form-field class="margin-top" appearance="outline" style="width: 450px">
+    <mat-label>Количество базового актива</mat-label>
+    <input type="number" matInput formControlName="baseAssetAmount">
+    <mat-error *ngIf="!baseAssetAmount.valid">Заполните обязательное поле</mat-error>
+  </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 450px">
+      <mat-label>Выберите тикер</mat-label>
+      <mat-select formControlName="tickerId">
+        <mat-option *ngFor="let team of tickers" [value]="team.id">
+          {{team.symbol}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!tickerId.valid">Заполните обязательное поле</mat-error>
+    </mat-form-field>
+
+  <mat-form-field appearance="outline"  style="width: 450px">
+    <mat-label>Дата открытия</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="openDate" >
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="!openDate.valid">Заполните обязательное поле</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"  style="width: 450px">
+    <mat-label>Дата закрытия</mat-label>
+    <input matInput [matDatepicker]="picker1" formControlName="closeDate" >
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+    <mat-error *ngIf="!closeDate.valid">Заполните обязательное поле</mat-error>
+  </mat-form-field>
+  <div style="display: flex; gap: 2rem; margin-bottom: 50px">
+    <button mat-flat-button color="primary" type="submit" style="width: 240px; height: 50px" class="margin-top"><p>Создать позицию</p></button>
+    <button mat-stroked-button color="primary" (click)="goBack()" style="width: 240px; height: 50px" class="margin-top"><p>Отменить</p></button>
+  </div>
+</form>
+
+

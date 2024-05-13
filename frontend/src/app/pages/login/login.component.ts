@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit{
         next: (r) => {
             this.loading = false;
             this.loginError = false;
-            // sessionStorage.setItem('token', r.data);
+            localStorage.setItem('token', 'Bearer ' + r.token);
             void this.router.navigate(
               ['/'],
             );

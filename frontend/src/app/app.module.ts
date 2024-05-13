@@ -8,6 +8,8 @@ import {HttpTokenInterceptor} from "./core/interceptors/http.token.interceptor";
 import {AuthGuard} from "./core/guards/auth.guard";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {PagesModule} from "./pages/pages.module";
+import {NotifierModule} from "angular-notifier";
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import {PagesModule} from "./pages/pages.module";
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NotifierModule,
+    NgChartsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},
