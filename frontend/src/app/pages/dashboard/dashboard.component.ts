@@ -38,11 +38,11 @@ export class DashboardComponent implements OnInit{
   single: SingleData[] = [
     {
       name: 'СПОТ',
-      value: this.dataT?.spotDistribution!
+      value: this.dataT? this.dataT.spotDistribution : 0
     },
     {
       name: 'ФЬЮЧЕРС',
-      value: this.dataT?.futuresDistribution !
+      value: this.dataT? this.dataT.futuresDistribution : 0
     },
   ];
   portfolios: Portfolio[] = [];
@@ -62,11 +62,11 @@ export class DashboardComponent implements OnInit{
       this.dataT = res;
       this.single = [{
         name: 'СПОТ',
-        value: this.dataT?.spotDistribution!
+        value: this.dataT? this.dataT.spotDistribution : 0
       },
         {
           name: 'ФЬЮЧЕРС',
-          value: this.dataT?.futuresDistribution !
+          value: this.dataT? this.dataT.futuresDistribution : 0
         },]
     });
     this.startupService.getInvestmentPrice().subscribe(res => this.priceTotal = res);
