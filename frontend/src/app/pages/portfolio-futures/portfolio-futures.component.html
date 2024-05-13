@@ -1,10 +1,10 @@
 <h1>Портфель <b style="color: #1b3dff">{{potfolio.name}}</b></h1>
-<button mat-raised-button color="accent" (click)="goToNextPage(potfolio)" cdkFocusInitial >Добавить позицию</button>
+<button mat-raised-button color="primary" (click)="goToNextPage(potfolio)" cdkFocusInitial >Добавить позицию</button>
 <div style="display: flex; margin-top: 40px; align-items: center; justify-content: space-between; width: 100%;">
   <p>Стоимость: <b>{{price?  price+ ' РУБ' : '0 РУБ'}}</b></p>
   <p>Прибыль: <b>{{profit?.portfolioProfit ? profit?.portfolioProfit+ ' РУБ' : '0 РУБ'}}</b></p>
 </div>
-<div style="margin-top: 100px">
+<div style="margin-top: 50px">
   <ngx-charts-line-chart
                          [view]="view"
                          [scheme]="colorScheme"

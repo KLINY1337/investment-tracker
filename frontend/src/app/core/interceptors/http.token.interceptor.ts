@@ -22,9 +22,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       })
     }
     return next.handle(req).pipe(catchError((e: HttpErrorResponse) => {
-      // if(e.status === 401 || e.status === 403) {
-      //   this.userService.logout();
-      // }
+      if(e.status === 401 || e.status === 403) {
+        this.userService.logout();
+      }
       return throwError(() => e.message);
     }));
   }
