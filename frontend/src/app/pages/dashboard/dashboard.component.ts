@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit{
   ];
   portfolios: Portfolio[] = [];
   displayedColumns: string[] = ['Название', 'Действие'];
-  priceTotal: null | GetTotalPrice;
+  priceTotal: null | GetTotalPrice = null;
   goToNextPage(portfolio: Portfolio) {
     this.router.navigate(['portfolio-futures', portfolio.id],  { state: { portfolioState: portfolio} })
 
@@ -58,8 +58,18 @@ export class DashboardComponent implements OnInit{
   }
   getInfo() {
     this.startupService.getAllPortfolios().subscribe((res)=> this.portfolios = res.slice(0,5));
-    this.startupService.getDistribution().subscribe((res)=> this.dataT = res);
-    this.startupService.getInvestmentPrice().subscribe(res => this.priceTotal = res)
+    this.startupService.getDistribution().subscribe((res)=> {
+      this.dataT = res;
+      this.single = [{
+        name: 'СПОТ',
+        value: this.dataT?.spotDistribution!
+      },
+        {
+          name: 'ФЬЮЧЕРС',
+          value: this.dataT?.futuresDistribution !
+        },]
+    });
+    this.startupService.getInvestmentPrice().subscribe(res => this.priceTotal = res);
   }
   openDialog() {
     const dialogRef = this.dialog.open(AddPortfolioModelComponent, {

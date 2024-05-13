@@ -1,5 +1,5 @@
 <h1>Главная</h1>
-<p style="padding-top: 40px !important;">Общая стоимость всех портфелей: <b>{{priceTotal?.userPortfoliosTotalPrice}} РУБ</b></p>
+<p style="padding-top: 40px !important;">Общая стоимость всех портфелей: <b>{{priceTotal?.userPortfoliosTotalPrice ? priceTotal?.userPortfoliosTotalPrice : 0}} РУБ</b></p>
 <div style="display: flex;
     align-items: baseline; gap: 3rem">
 <h2 style="padding-top: 40px !important;">Все портфели</h2>
