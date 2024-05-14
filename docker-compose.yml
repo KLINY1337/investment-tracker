@@ -31,6 +31,13 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+
+  angular-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
   
 
 networks:
