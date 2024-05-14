@@ -1,0 +1,36 @@
+<h1>Главная</h1>
+<p style="padding-top: 40px !important;">Общая стоимость всех портфелей: <b>{{priceTotal?.userPortfoliosTotalPrice ? priceTotal?.userPortfoliosTotalPrice : 0}} РУБ</b></p>
+<div style="display: flex;
+    align-items: baseline; gap: 3rem">
+<h2 style="padding-top: 40px !important;">Все портфели</h2>
+<button style=" width: 300px;" mat-raised-button color="primary" (click)="openDialog()">Создать новый портфель</button>
+</div>
+<div style=" display: flex;     align-items: normal;; justify-content: space-between; margin-top: 30px">
+  <div class="card" style="padding: 1rem;    gap: 2rem;display:flex; flex-direction: column;width: 46%; min-height: 300px;border: 1px solid rgba(145, 145, 156, 0.1);box-shadow: 0 -1px 20px 0 rgba(145, 145, 156, 0.4);">
+    <h2 style="text-align: center;">Список портфелей</h2>
+    <table style="    box-shadow: none;
+    background-color: rgba(250, 250, 250, 0.8);" mat-table [dataSource]="portfolios" class="mat-elevation-z8">
+      <ng-container matColumnDef="Название">
+        <th mat-header-cell *matHeaderCellDef><b>Название</b></th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Действие">
+        <th mat-header-cell style="text-align: end;" *matHeaderCellDef><b>Действие</b></th>
+        <td mat-cell *matCellDef="let row;" style="text-align: end;color: #1b3dff; cursor: pointer" (click)="goToNextPage(row)"> <button mat-stroked-button color="accent" (click)="goToNextPage(row)">Посмотреть</button> </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <small [routerLink]="['/portfolio']" style="cursor: pointer; color: #1b3dff; text-align: center">Больше информации</small>
+  </div>
+  <div class="card" style="padding: 1rem;display:flex; flex-direction: column;width: 46%; min-height: 300px; border: 1px solid rgba(145, 145, 156, 0.1);box-shadow: 0 -1px 20px 0 rgba(145, 145, 156, 0.4);">
+    <h2 style="text-align: center;">Распределение долей по типам портфелей</h2>
+    <ngx-charts-advanced-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="single"
+      [gradient]="gradient"
+    >
+    </ngx-charts-advanced-pie-chart>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+.card {
+  transition: all 0.35s;
+  $btn-color: #979695;
+  $btn-hover-color: #5e5e5e;
+  &:hover {
+    transform: translateY(-0.25em);
+    box-shadow: 0 0 0.5em 0em $btn-hover-color;
+    border-color: $btn-hover-color;
+    color: $btn-hover-color;
+  }
+}

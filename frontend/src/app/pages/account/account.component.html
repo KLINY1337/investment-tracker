@@ -1,0 +1,33 @@
+<h1>Личный кабинет</h1>
+<h2 style="padding-top: 40px !important">Настройки аккаунта</h2>
+<div style="display: flex; flex-direction: column; gap: 1.5rem" *ngIf="user | async as userRef">
+  <p>Имя аккаунта: <b style="color: #1b3dff;">{{userRef.username}}</b></p>
+  <p>Электронная почта:<b style="color: #1b3dff;">{{userRef.email}}</b></p>
+  <button *ngIf="!isOpenedForm()" style="width: 300px;" mat-raised-button color="primary" (click)="isOpenedForm.set(true)">Сменить пароль</button>
+  <form *ngIf="isOpenedForm()"  style="display: flex; flex-direction: column; gap: 1.5rem">
+    <mat-form-field class="margin-top" appearance="outline" style="width: 300px; height: 50px">
+      <mat-label>Новый пароль</mat-label>
+      <input matInput [formControl]="newPassword" type="password">
+<!--      <mat-error *ngIf="">Требуется указать логин</mat-error>-->
+    </mat-form-field>
+    <button (click)="changePassword(userRef.email, userRef.username)" style="width: 300px;" mat-raised-button color="primary">Сменить</button>
+    <button (click)="isOpenedForm.set(false); newPassword.reset()" style="width: 300px;" mat-stroked-button color="primary">Отменить</button>
+  </form>
+</div>
+<h2 style="padding-top: 40px !important">Статистика</h2>
+<div style="display: flex; flex-direction: column; gap: 1.5rem">
+  <div style="display: flex; flex-direction: row; gap: 2rem; align-items: center" *ngIf="portfoliosCountByUserId | async as count">
+    <p>Всего портфелей: <b>{{count.portfoliosAmount}}</b></p>
+    <button style="width: 300px;" mat-stroked-button color="primary" [routerLink]="['/portfolio']">Посмотреть</button>
+
+  </div>
+  <div style="display: flex; flex-direction: row; gap: 2rem; align-items: center" *ngIf="investmentPrice | async as price">
+    <p>Общая сумма портфелей: <b>{{price.userPortfoliosTotalPrice}}</b></p>
+    <mat-button-toggle-group [formControl]="currencyControl" style="width: auto">
+      <mat-button-toggle value="RUB">RUB</mat-button-toggle>
+      <mat-button-toggle value="USD">USD</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+<button style="margin-top:40px !important; width: 300px;" mat-raised-button (click)="logout()" color="primary">Выйти из аккаунта</button>
+

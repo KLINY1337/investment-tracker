@@ -1,0 +1,13 @@
+<div style="display:flex; flex-direction: column; gap: .2rem; padding: 2rem; align-items: center">
+<h1 mat-dialog-title>Добавление нового портфеля</h1>
+  <div mat-dialog-content>
+  <mat-form-field appearance="outline" style="margin-top: 30px; width: 350px;">
+    <mat-label>Название портфеля</mat-label>
+    <input matInput [formControl]="name" >
+  </mat-form-field>
+</div>
+<div mat-dialog-actions style="display:flex; gap: 2rem; align-items: center; justify-content: center">
+  <button mat-stroked-button (click)="onNoClick()">Отмена</button>
+  <button mat-raised-button color="accent" (click)="save()" cdkFocusInitial>Сохранить</button>
+</div>
+</div>

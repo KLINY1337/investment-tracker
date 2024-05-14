@@ -1,0 +1,56 @@
+<h1>Портфель <b style="color: #1b3dff">{{potfolio.name}}</b></h1>
+<button mat-raised-button color="primary" (click)="goToNextPage(potfolio)" cdkFocusInitial >Добавить позицию</button>
+<div style="display: flex; margin-top: 40px; align-items: center; justify-content: space-between; width: 100%;">
+  <p>Стоимость: <b>{{price?  price+ ' РУБ' : '0 РУБ'}}</b></p>
+  <p>Прибыль: <b>{{profit?.portfolioProfit ? profit?.portfolioProfit+ ' РУБ' : '0 РУБ'}}</b></p>
+</div>
+<div style="margin-top: 50px">
+  <ngx-charts-line-chart
+                         [view]="view"
+                         [scheme]="colorScheme"
+                         [results]="single"
+                         [gradient]="gradient"
+                         [xAxis]="showXAxis"
+                         [yAxis]="showYAxis"
+                         [legend]="showLegend"
+                         [showXAxisLabel]="showXAxisLabel"
+                         [showYAxisLabel]="showYAxisLabel"
+                         [xAxisLabel]="xAxisLabel"
+                         [yAxisLabel]="yAxisLabel">
+  </ngx-charts-line-chart>
+</div>
+<h2>Позиции</h2>
+<table style="    border: 1px solid rgba(128,128,128, 0.2); box-shadow: none;
+    background-color: rgba(250, 250, 250, 0.8);" mat-table [dataSource]="positions" class="mat-elevation-z8">
+  <ng-container matColumnDef="Позиция">
+    <th mat-header-cell *matHeaderCellDef><b>Позиция</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.ticker.symbol}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Биржа">
+    <th mat-header-cell *matHeaderCellDef><b>Биржа</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.ticker.exchangeName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Тип позиции">
+    <th mat-header-cell *matHeaderCellDef><b>Тип позиции</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.ticker.marketType}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Цена входа">
+    <th mat-header-cell *matHeaderCellDef><b>Цена входа</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.openQuoteAssetPrice}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Цена выхода">
+    <th mat-header-cell *matHeaderCellDef><b>Цена выхода</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.closeQuoteAssetPrice}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Размер позиции">
+    <th mat-header-cell *matHeaderCellDef><b>Размер позиции</b></th>
+    <td mat-cell *matCellDef="let element"> {{element.baseAssetAmount}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Прибыль">
+    <th mat-header-cell *matHeaderCellDef><b>Прибыль</b></th>
+    <td mat-cell *matCellDef="let element"> {{(element.closeQuoteAssetPrice - element.openQuoteAssetPrice)/element.openQuoteAssetPrice * 100}} %</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
