@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickers")
 @RequiredArgsConstructor
+@CrossOrigin
 public class TickerController {
 
     private final TickerService tickerService;

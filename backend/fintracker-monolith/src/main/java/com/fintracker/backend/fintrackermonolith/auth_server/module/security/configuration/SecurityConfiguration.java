@@ -19,8 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -43,12 +47,13 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-//        http.cors(AbstractHttpConfigurer::disable);
+        http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
         http.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/auth/**", "/v3/api-docs","/actuator/**","/gigachat/**", "/swagger-ui.html", "/api/**")
                 .permitAll()
                 .anyRequest()
@@ -56,6 +61,28 @@ public class SecurityConfiguration {
         );
         return http.build();
     }
+
+    private static final String GET = "GET";
+
+    private static final String POST = "POST";
+
+    private static final String DELETE = "DELETE";
+
+    private static final String PUT = "PUT";
+
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowedMethods(GET, POST, DELETE, PUT, "OPTIONS")
+//                        .allowedHeaders("*")
+//                        .allowedOriginPatterns("*")
+//                        .allowCredentials(true);
+//            }
+//        };
+//    }
 
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
@@ -75,6 +102,27 @@ public class SecurityConfiguration {
 //        return source;
 //    }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Allow all origins
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+
+        // Allow all methods
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+
+        // Allow all headers
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+
+        // Allow credentials
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

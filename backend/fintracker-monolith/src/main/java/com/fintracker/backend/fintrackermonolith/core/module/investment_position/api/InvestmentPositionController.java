@@ -19,6 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/investment_positions")
 @RequiredArgsConstructor
+@CrossOrigin
 public class InvestmentPositionController {
 
     private final InvestmentPositionService investmentPositionService;

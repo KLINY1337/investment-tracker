@@ -23,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/portfolios")
 @RequiredArgsConstructor
+@CrossOrigin
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
