@@ -41,6 +41,7 @@ services:
     networks:
       - fintracker_core_network
     container_name: angular-app
+    restart: unless-stopped
   
 
 networks:
