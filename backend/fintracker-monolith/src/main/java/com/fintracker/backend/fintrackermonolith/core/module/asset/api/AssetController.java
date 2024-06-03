@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/assets")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://89.223.121.170:8080")
 public class AssetController {
 
     private final AssetService assetService;

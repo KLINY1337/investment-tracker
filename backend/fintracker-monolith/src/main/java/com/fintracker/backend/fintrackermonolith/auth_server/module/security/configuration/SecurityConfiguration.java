@@ -102,27 +102,27 @@ public class SecurityConfiguration {
 //        return source;
 //    }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+            CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow all origins
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
+            // Allow all origins
+            configuration.setAllowedOrigins(List.of("*", "http://89.223.121.170:8080"));
 
-        // Allow all methods
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+            // Allow all methods
+            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
 
-        // Allow all headers
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
+            // Allow all headers
+            configuration.setAllowedHeaders(Collections.singletonList("*"));
 
-        // Allow credentials
-        configuration.setAllowCredentials(true);
+    //        // Allow credentials
+    //        configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            source.registerCorsConfiguration("/**", configuration);
 
-        return source;
-    }
+            return source;
+        }
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

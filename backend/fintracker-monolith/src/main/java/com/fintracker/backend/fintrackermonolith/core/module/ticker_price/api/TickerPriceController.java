@@ -11,7 +11,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/v1/ticker_prices")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://89.223.121.170:8080")
 public class TickerPriceController {
 
     private final TickerPriceService tickerPriceService;

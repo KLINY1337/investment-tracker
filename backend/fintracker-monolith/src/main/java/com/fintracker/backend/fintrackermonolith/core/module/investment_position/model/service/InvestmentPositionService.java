@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.Port;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -117,13 +118,16 @@ public class InvestmentPositionService {
 
     public GetProfitByPortfolioIdResponse getProfitByPortfolioId(Long portfolioId) {
         List<InvestmentPosition> investmentPositions = getInvestmentPositionsByPortfoliosIds(List.of(portfolioId)).investmentPositions();
+        System.out.println(investmentPositions);
         final BigDecimal[] initialPrice = {BigDecimal.ZERO};
         investmentPositions.forEach(investmentPosition -> {
+            System.out.println(initialPrice[0]);
             initialPrice[0] = initialPrice[0].add(investmentPosition.getBaseAssetAmount().multiply(investmentPosition.getOpenQuoteAssetPrice()));
         });
 
         final BigDecimal[] currentPrice = {BigDecimal.ZERO};
         investmentPositions.forEach(investmentPosition -> {
+            System.out.println(currentPrice[0]);
             switch (investmentPosition.getTicker().getMarketType()) {
                 case FUTURE -> currentPrice[0] = currentPrice[0].add(investmentPosition.getCloseQuoteAssetPrice().multiply(investmentPosition.getBaseAssetAmount()));
                 case SPOT -> currentPrice[0] = currentPrice[0].add(ExchangeRateUtils.convertCurrencies(investmentPosition.getTicker().getBaseAsset().getSymbol(), investmentPosition.getTicker().getQuoteAsset().getSymbol(), investmentPosition.getBaseAssetAmount(), new Date()));
@@ -133,7 +137,7 @@ public class InvestmentPositionService {
         return new GetProfitByPortfolioIdResponse(
                 true,
                 "Poshitali profit",
-                currentPrice[0].divide(initialPrice[0]).subtract(BigDecimal.ONE).multiply(new BigDecimal(100))
+                currentPrice[0].subtract(initialPrice[0])
         );
     }
 

@@ -23,7 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/portfolios")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://89.223.121.170:8080")
 public class PortfolioController {
 
     private final PortfolioService portfolioService;

@@ -19,7 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/investment_positions")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://89.223.121.170:8080")
 public class InvestmentPositionController {
 
     private final InvestmentPositionService investmentPositionService;
