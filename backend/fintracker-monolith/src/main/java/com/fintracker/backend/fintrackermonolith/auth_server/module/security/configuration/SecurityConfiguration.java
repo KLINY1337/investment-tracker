@@ -107,7 +107,7 @@ public class SecurityConfiguration {
             CorsConfiguration configuration = new CorsConfiguration();
 
             // Allow all origins
-            configuration.setAllowedOrigins(List.of("*", "http://89.223.121.170:8080"));
+            configuration.setAllowedOrigins(List.of("*", "http://5.23.48.222:8080"));
 
             // Allow all methods
             configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));

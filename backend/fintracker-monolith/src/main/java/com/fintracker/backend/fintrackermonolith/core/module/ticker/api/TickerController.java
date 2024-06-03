@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://89.223.121.170:8080")
+@CrossOrigin(origins = "http://5.23.48.222:8080")
 public class TickerController {
 
     private final TickerService tickerService;
